@@ -1,0 +1,42 @@
+# Node
+node_modules/
+
+# Vite
+/dist/
+/.vite/
+
+# Build output
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# Env files
+.env*
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# SSR output (if using SSR frameworks like Vite SSR or Next.js)
+/.output/
+/.vercel/
+/.netlify/
+
+# Misc
+*.local
+
+# Mac system files
+.DS_Store
