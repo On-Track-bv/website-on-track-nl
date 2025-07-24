@@ -1,0 +1,29 @@
+:root {
+  --my-primary: #0c2659;
+  --my-primary-dark: #f8f9fa;
+  --my-accent: #f28f38;
+  --my-accent2: #589ea6;
+  --my-accentlight: #f7ce91;
+  --my-accent2light: #a4d7db;
+  --my-bg: #f8f9fa;
+  --my-text: #0c2659;
+  --my-text-neg: #f8f9fa;
+  --my-hover:  #cfddfa;
+  --my-inputfields:  #edf2fc;
+  --my-inputinvalid:  #d93d1a;
+}
+
+[data-mantine-color-scheme='dark'] {
+  --my-primary: #f8f9fa;
+  --my-primary-dark: #0c2659;
+  --my-accent: #f28f38;
+  --my-accent2: #589ea6;
+  --my-accentlight: #f7ce91;
+  --my-accent2light: #a4d7db;
+  --my-bg: #0c2659;
+  --my-text: #f8f9fa;
+  --my-text-neg: #0c2659;
+  --my-hover: #264175;
+  --my-inputfields:  #264175;
+  --my-inputinvalid:  #d93d1a;
+}

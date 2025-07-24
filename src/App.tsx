@@ -1,12 +1,15 @@
-import { AppShell, Text, Group, Container, Space } from '@mantine/core';
+import { AppShell, Text, Group, Container, Space, Box } from '@mantine/core';
 import { Header } from './components/header/Header';
+import { Contact } from './components/contact/Contact';
+import './styles/colors.css';
+import './styles/fonts.css';
 
 
 function App() {
 
   return (
     <AppShell
-      header={{ height: 60 }}
+      header={{ height: 69 }}
       padding="md"
     >
       <AppShell.Header>
@@ -24,6 +27,20 @@ function App() {
           <Text>
             We are working hard to bring you something awesome. Please check back soon!
           </Text>
+
+          <Box
+            my="xl"
+            style={{
+              width: 200, // or any size you prefer
+              height: 5000,
+              backgroundColor: '#ccc', // change to your desired color
+              margin: '0 auto', // center horizontally
+            }}
+          />
+
+          <Box id="contact-us" my="xl">
+            <Contact />
+          </Box>
         </Container>
       </AppShell.Main>
     </AppShell>
