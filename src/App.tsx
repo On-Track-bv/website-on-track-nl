@@ -4,6 +4,9 @@ import { Contact } from './components/contact/Contact';
 import './styles/colors.css';
 import './styles/fonts.css';
 import { Home } from './components/home/Home';
+import { AboutUs } from './components/aboutUs/AboutUs';
+import { Footer } from './components/footer/Footer';
+import { VisionMission } from './components/visionMission/VisionMission';
 
 
 function App() {
@@ -22,6 +25,14 @@ function App() {
           <Box id="top"  my="xl">
             <Home />
           </Box>
+          <Box id="why"  my="xl">
+            <VisionMission />
+          </Box>
+          <Box id="who"  my="xl">
+            <AboutUs />
+          </Box>
+          
+
           {/* <Group align="center" justify="center" gap="xl">
             <Text size="xl" fw={700} span style={{ fontSize: 32, lineHeight: 1 }} role="img" aria-label="construction">🚧</Text>
             <Text size="xl" fw={700}>Welcome to <b>On-Track</b></Text>
@@ -46,6 +57,7 @@ function App() {
             <Contact />
           </Box>
         </Container>
+        <Footer />
       </AppShell.Main>
     </AppShell>
   )

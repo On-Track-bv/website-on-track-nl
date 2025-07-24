@@ -2,7 +2,6 @@
   background: var(--my-bg);
   padding: 2rem;
   border-radius: var(--mantine-radius-md);
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.04);
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -29,13 +28,13 @@
 
 .input {
   background: var(--my-inputfields) ;
-  color: var(--my-text) ;
+  color: var(--my-text) !important ; /* text that is being types */
   border-radius: var(--mantine-radius-sm) ;
   border: 1px solid var(--my-primary) ;
 }
 
 .label {
-  color: var(--my-primary);
+  color: var(--my-primary)!important  ;
   font-weight: 500; /* Mantine gebruikt 500 */
   font-family: 'Nunito', Arial, sans-serif;
   font-size: var(--input-label-size, var(--mantine-font-size-sm));;
@@ -45,7 +44,11 @@
   cursor: default;
   -webkit-tap-highlight-color: transparent;
 }
-
+.input::placeholder,
+.react-tel-input .form-control::placeholder {
+  color: var(--my-subtext) !important;
+  opacity: 1 !important; /* ensures full color */
+}
 .button {
   background: var(--my-primary);
   color: var(--my-text-neg);
@@ -123,4 +126,8 @@ input[aria-invalid="true"],
 textarea[aria-invalid="true"],
 .react-tel-input .form-control[data-invalid] {
   border-color: var(--my-inputinvalid) !important;
+}
+.emailHighlight {
+  color: var(--my-accent);
+  font-weight: 700;
 }

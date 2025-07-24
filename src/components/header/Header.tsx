@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Burger, Container, Group, ActionIcon, Button } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from "react-country-flag";
@@ -12,17 +12,17 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 const linksNl = [
     { link: '#top', label: 'Home' },
-    { link: '#who', label: 'Over ons' },
     { link: '#why', label: 'Visie en missie' },
     { link: '#what', label: 'Diensten' },
+    { link: '#who', label: 'Over ons' },
     { link: '#contact-us', label: 'Contact' },
 ];
 
 const linksEn = [
     { link: '#top', label: 'Home' },
-    { link: '#who', label: 'About us' },
     { link: '#why', label: 'Vision and mission' },
     { link: '#what', label: 'Services' },
+    { link: '#who', label: 'About us' },
     { link: '#contact-us', label: 'Contact' },
 ];
 
@@ -34,29 +34,52 @@ export function Header() {
 
     const links = lang === 'nl' ? linksNl : linksEn;
 
-    const items = links.map((link) => (
-        <a
-            key={link.label}
-            href={link.link}
-            className={classes.link}
-            data-active={active === link.link || undefined}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(link.link);
-                if (link.link === '#top') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (link.link.startsWith('#')) {
-                    const el = document.getElementById(link.link.substring(1));
-                    if (el) {
-                        el.scrollIntoView({ behavior: 'smooth' });
-                    }
+  const items = links.map((link) => (
+    <a
+        key={link.label}
+        href={link.link}
+        className={classes.link}
+        data-active={active === link.link || undefined}
+        onClick={(event) => {
+            event.preventDefault();
+            if (link.link === '#top') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (link.link.startsWith('#')) {
+                const el = document.getElementById(link.link.substring(1));
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
                 }
-            }}
-        >
-            {link.label}
-        </a>
-    ));
+            }
+            // Remove: setActive(link.link);
+        }}
+    >
+        {link.label}
+    </a>
+));
+    const sectionIds = links.map(link => link.link.replace('#', ''));
 
+   useEffect(() => {
+    const handleScroll = () => {
+        const scrollPosition = window.scrollY + 100; // offset for header height
+        let currentSection = "#top"; // fallback to Home
+
+        for (const id of sectionIds) {
+            const el = document.getElementById(id);
+            if (el) {
+                const top = el.offsetTop;
+                if (scrollPosition >= top) {
+                    currentSection = `#${id}`;
+                }
+            }
+        }
+        if (active !== currentSection) {
+            setActive(currentSection);
+        }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+}, [sectionIds, active]);
     return (
         <header className={classes.header}>
             <Container size="lg" className={classes.inner}>

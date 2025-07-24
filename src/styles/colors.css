@@ -9,6 +9,7 @@
   --my-bgheader: #f8f9fa;
   --my-text: #0c2659;
   --my-text-neg: white;
+  --my-subtext: #949494;
   --my-hover:  #cfddfa;
   --my-inputfields:  #edf2fc;
   --my-inputinvalid:  #d93d1a;
@@ -23,9 +24,10 @@
   --my-accentlight: #f7ce91;
   --my-accent2light: #a4d7db;
   --my-bg: #0c2659;
-  --my-bgheader: #102753;
+  --my-bgheader: #264175;
   --my-text: white;
   --my-text-neg: #0c2659;
+  --my-subtext: #cfddfa;
   --my-hover: #264175;
   --my-inputfields:  #264175;
   --my-inputinvalid:  #d93d1a;

@@ -17,7 +17,7 @@ const texts = {
             </h1>
         ),
         description:
-            'Define what information you need, and we will take care of every necessary connection. Between your programs and with your people.',
+            'Define what information you need and we will take care of every necessary connection. Between your programs and with your people.',
         getStarted: 'Get started',
         github: 'GitHub',
     },
@@ -32,7 +32,7 @@ const texts = {
             </h1>
         ),
         description:
-            'Stel vast welke informatie je nodig hebt dan zorgen wij voor elke noodzakelijke verbinding. Tussen jou programma\'s en met jou mensen.',
+            'Stel vast welke informatie je nodig hebt, dan zorgen wij voor elke noodzakelijke verbinding. Tussen jou programma\'s en met jou mensen.',
         getStarted: 'Aan de slag',
         github: 'GitHub',
     },

@@ -11,7 +11,11 @@ import 'react-phone-input-2/lib/style.css';
 
 const texts = {
     en: {
-        title: 'Get in touch',
+        title: (
+            <>
+                Get in touch or email us at: <span className={classes.emailHighlight}>info@on-track.nl</span>
+            </>
+        ),
         name: 'Name',
         email: 'Email',
         subject: 'Subject',
@@ -27,7 +31,11 @@ const texts = {
         phonePlaceholder: 'Your phone number',
     },
     nl: {
-        title: 'Neem contact op',
+        title: (
+            <>
+                Neem contact op of e-mail naar: <span className={classes.emailHighlight}>info@on-track.nl</span>
+            </>
+        ),
         name: 'Naam',
         email: 'E-mail',
         subject: 'Onderwerp',
