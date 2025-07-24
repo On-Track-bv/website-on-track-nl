@@ -3,6 +3,7 @@ import { Header } from './components/header/Header';
 import { Contact } from './components/contact/Contact';
 import './styles/colors.css';
 import './styles/fonts.css';
+import { Home } from './components/home/Home';
 
 
 function App() {
@@ -17,8 +18,11 @@ function App() {
       </AppShell.Header>
       <AppShell.Main>
         <Container size="xl" style={{ textAlign: 'center' }}>
-          <Space h="xl" />
-          <Group align="center" justify="center" gap="xl">
+          
+          <Box id="top"  my="xl">
+            <Home />
+          </Box>
+          {/* <Group align="center" justify="center" gap="xl">
             <Text size="xl" fw={700} span style={{ fontSize: 32, lineHeight: 1 }} role="img" aria-label="construction">🚧</Text>
             <Text size="xl" fw={700}>Welcome to <b>On-Track</b></Text>
             <Text size="xl" fw={700} span style={{ fontSize: 32, lineHeight: 1 }} role="img" aria-label="construction">🚧</Text>
@@ -26,9 +30,9 @@ function App() {
           <Space h="xl" />
           <Text>
             We are working hard to bring you something awesome. Please check back soon!
-          </Text>
+          </Text> */}
 
-          <Box
+          {/* <Box
             my="xl"
             style={{
               width: 200, // or any size you prefer
@@ -36,7 +40,7 @@ function App() {
               backgroundColor: '#ccc', // change to your desired color
               margin: '0 auto', // center horizontally
             }}
-          />
+          /> */}
 
           <Box id="contact-us" my="xl">
             <Contact />

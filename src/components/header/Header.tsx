@@ -12,17 +12,17 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 const linksNl = [
     { link: '#top', label: 'Home' },
-    { link: '#who', label: 'Wie zijn wij' },
-    { link: '#why', label: 'Waarvoor staan wij' },
-    { link: '#what', label: 'Wat doen wij' },
+    { link: '#who', label: 'Over ons' },
+    { link: '#why', label: 'Visie en missie' },
+    { link: '#what', label: 'Diensten' },
     { link: '#contact-us', label: 'Contact' },
 ];
 
 const linksEn = [
     { link: '#top', label: 'Home' },
-    { link: '#who', label: 'Who are we' },
-    { link: '#why', label: 'What do we stand for' },
-    { link: '#what', label: 'What do we do' },
+    { link: '#who', label: 'About us' },
+    { link: '#why', label: 'Vision and mission' },
+    { link: '#what', label: 'Services' },
     { link: '#contact-us', label: 'Contact' },
 ];
 
