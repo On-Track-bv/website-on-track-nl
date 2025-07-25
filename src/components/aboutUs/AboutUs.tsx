@@ -1,7 +1,7 @@
 import { useLanguage } from '../../contexts/LanguageContext';
-import janImg from '../../assets/on-track/jan.jpg';
-import stijnImg from '../../assets/on-track/stijn.jpg';
-import rienhImg from '../../assets/on-track/rien.jpg';
+import janImg from '../../assets/on-track/Jan.jpg';
+import stijnImg from '../../assets/on-track/Stijn.jpg';
+import rienhImg from '../../assets/on-track/Rien.jpg';
 import classes from './AboutUs.module.css';
 
 const people = {
