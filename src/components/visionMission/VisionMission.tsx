@@ -1,4 +1,4 @@
-import { Container, Text, Title, Paper } from '@mantine/core';
+import { Container, Text, Title } from '@mantine/core';
 import classes from './VisionMission.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useRef, useEffect, useState } from 'react';

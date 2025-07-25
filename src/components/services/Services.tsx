@@ -1,6 +1,5 @@
 import {
   IconDatabase,
-  IconUsers,
   IconBuildingBridge,
   IconSettingsAutomation,
   IconRepeat,
