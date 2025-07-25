@@ -1,6 +1,6 @@
 
 
-import { Button, Container, Group, Text } from '@mantine/core';
+import { Button, Container, Group } from '@mantine/core';
 import { GithubIcon } from '@mantinex/dev-icons';
 import classes from './Home.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';

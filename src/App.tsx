@@ -1,4 +1,4 @@
-import { AppShell, Text, Group, Container, Space, Box } from '@mantine/core';
+import { AppShell, Container, Box } from '@mantine/core';
 import { Header } from './components/header/Header';
 import { Contact } from './components/contact/Contact';
 import './styles/colors.css';
