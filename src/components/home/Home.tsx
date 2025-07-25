@@ -12,8 +12,8 @@ const texts = {
                 Your{' '}
                 <span className={classes.gradientText}>
                     dataflow
-                </span>{' '}
-                finally as expected
+                </span>{''}
+                , finally as expected
             </h1>
         ),
         description:
@@ -27,8 +27,8 @@ const texts = {
                 Jouw{' '}
                 <span className={classes.gradientText}>
                     dataset
-                </span>{' '}
-                eindelijk zoals verwacht
+                </span>{''}
+                , eindelijk zoals verwacht
             </h1>
         ),
         description:
