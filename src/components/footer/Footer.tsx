@@ -1,9 +1,8 @@
-import { IconBrandInstagram, IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react';
-import { ActionIcon, Container, Group, Text, useMantineColorScheme } from '@mantine/core';
-import onTrackBeeldmerkLight from '../../assets/on-track-beeldmerk.svg';
-import onTrackBeeldmerkDark from '../../assets/on-track-beeldmerk_wit.svg';
-import onTrackLogoLight from '../../assets/on-track-outline_logo.svg';
-import onTrackLogoDark from '../../assets/on-track-outline_logo_wit.svg';
+import {Container, Group, Text, useMantineColorScheme } from '@mantine/core';
+import onTrackBeeldmerkLight from '../../assets/on-track/on-track-beeldmerk.svg';
+import onTrackBeeldmerkDark from '../../assets/on-track/on-track-beeldmerk_wit.svg';
+import onTrackLogoLight from '../../assets/on-track/on-track-outline_logo.svg';
+import onTrackLogoDark from '../../assets/on-track/on-track-outline_logo_wit.svg';
 import classes from './Footer.module.css';
 
 import { useLanguage } from '../../contexts/LanguageContext';

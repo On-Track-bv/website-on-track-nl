@@ -7,6 +7,7 @@ import { Home } from './components/home/Home';
 import { AboutUs } from './components/aboutUs/AboutUs';
 import { Footer } from './components/footer/Footer';
 import { VisionMission } from './components/visionMission/VisionMission';
+import { Services } from './components/services/Services';
 
 
 function App() {
@@ -27,6 +28,9 @@ function App() {
           </Box>
           <Box id="why"  my="xl">
             <VisionMission />
+          </Box>
+          <Box id="what"  my="xl">
+            <Services />
           </Box>
           <Box id="who"  my="xl">
             <AboutUs />

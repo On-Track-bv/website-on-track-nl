@@ -1,8 +1,7 @@
-import { Avatar, Button, Paper, Text, SimpleGrid } from '@mantine/core';
 import { useLanguage } from '../../contexts/LanguageContext';
-import janImg from '../../assets/jan.jpg';
-import stijnImg from '../../assets/stijn.jpg';
-import rienhImg from '../../assets/rien.jpg';
+import janImg from '../../assets/on-track/jan.jpg';
+import stijnImg from '../../assets/on-track/stijn.jpg';
+import rienhImg from '../../assets/on-track/rien.jpg';
 import classes from './AboutUs.module.css';
 
 const people = {
@@ -12,21 +11,21 @@ const people = {
       role: 'Co-founder',
       email: 'jbrouwer@on-track.nl',
       img: janImg,
-      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida urna libero, vitae interdum ipsum tristique vel. Cras nec sem in diam faucibus dapibus. Sed dolor velit, ultricies vitae nisl quis, rhoncus aliquet urna. Curabitur ultricies sapien turpis, quis tempus nunc congue at. Vestibulum ornare erat vel pharetra malesuada. Sed quis vulputate orci, quis pretium nunc. Nulla ullamcorper nibh at risus tempor feugiat. Nunc tortor enim, lacinia at ultrices vehicula, euismod quis elit. Proin consequat lorem eu ex tincidunt, in suscipit dolor semper.',
+      story: 'Jan is the technical engine behind On-Track. With a background in architecture and a passion for digital innovation, he develops smart tools that truly work in practice. His drive? Solving complex problems through open standards and automation. Jan ensures the technical quality of our solutions and translates abstract standards into practical applications.',
     },
     {
       name: 'Stijn van Schaijk',
       role: 'Co-founder',
       email: 'svschaijk@on-track.nl',
       img: stijnImg,
-      story: 'Etiam congue nulla sed ante pulvinar dictum. Nulla nec facilisis erat, non efficitur ex. Praesent ac odio non libero suscipit eleifend. Nunc facilisis aliquet erat vel facilisis. Maecenas at tortor in turpis finibus aliquet. Duis lacinia mi non lorem facilisis, et faucibus dui pulvinar. In fringilla malesuada ultricies. Duis diam sapien, porta sed diam id, laoreet sagittis lacus. Phasellus fringilla condimentum lorem, nec luctus eros interdum eget. Curabitur eros diam, gravida vitae volutpat non, feugiat varius nulla. Sed laoreet luctus sagittis. Donec vehicula condimentum nulla vel placerat. Aliquam lobortis eget sapien sit amet lacinia. Aliquam commodo, dolor eget placerat porta, ante tellus dapibus velit, et dictum tellus diam ut arcu. Maecenas eget suscipit orci.',
+      story: 'Stijn makes sure technology and people connect. He guides clients from initial needs to full implementation, always with a personal touch. His strength lies in bridging the gap from construction site to boardroom. At On-Track, he focuses on client processes, implementation, commercial strategy, and sustainability.',
     },
     {
       name: 'Rien van der Scheur',
       role: 'Co-founder',
       email: 'rvdscheur@on-track.nl',
       img: rienhImg,
-      story: 'Nunc sit amet ornare lectus. Donec non velit ut ex tristique ornare. Nulla at magna enim. Integer quis dui eget metus egestas lacinia sed vel arcu. Sed ultrices, eros in finibus tempus, orci lorem scelerisque est, nec efficitur ligula elit sit amet sem. Maecenas pellentesque lectus a iaculis euismod. Sed a scelerisque lorem, id placerat purus. Etiam quis nunc dui. Nam pulvinar luctus facilisis. Duis at pharetra nibh. Nullam nec mi eget justo gravida faucibus. Phasellus sit amet ullamcorper nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      story: 'Rien moves effortlessly between technology and real-world application. He focuses on user experience, BIM processes, and product development. With a strong understanding of both systems and the shop floor, Rien ensures our digital solutions truly fit the way people work.',
     },
   ],
   nl: [
@@ -35,21 +34,21 @@ const people = {
       role: 'Mede-eigenaar',
       email: 'jbrouwer@on-track.nl',
       img: janImg,
-      story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida urna libero, vitae interdum ipsum tristique vel. Cras nec sem in diam faucibus dapibus. Sed dolor velit, ultricies vitae nisl quis, rhoncus aliquet urna. Curabitur ultricies sapien turpis, quis tempus nunc congue at. Vestibulum ornare erat vel pharetra malesuada. Sed quis vulputate orci, quis pretium nunc. Nulla ullamcorper nibh at risus tempor feugiat. Nunc tortor enim, lacinia at ultrices vehicula, euismod quis elit. Proin consequat lorem eu ex tincidunt, in suscipit dolor semper.   ',
+      story: 'Jan is de technische motor achter On-Track. Met zijn achtergrond in bouwkunde en passie voor digitalisering ontwikkelt hij slimme tools die écht werken in de praktijk. Zijn drijfveer? Complexe problemen oplossen met open standaarden en automatisering. Jan bewaakt de inhoudelijke kwaliteit en vertaalt abstracte standaarden naar concrete oplossingen.',
     },
     {
       name: 'Stijn van Schaijk',
       role: 'Mede-eigenaar',
       email: 'svschaijk@on-track.nl',
       img: stijnImg,
-      story: 'Etiam congue nulla sed ante pulvinar dictum. Nulla nec facilisis erat, non efficitur ex. Praesent ac odio non libero suscipit eleifend. Nunc facilisis aliquet erat vel facilisis. Maecenas at tortor in turpis finibus aliquet. Duis lacinia mi non lorem facilisis, et faucibus dui pulvinar. In fringilla malesuada ultricies. Duis diam sapien, porta sed diam id, laoreet sagittis lacus. Phasellus fringilla condimentum lorem, nec luctus eros interdum eget. Curabitur eros diam, gravida vitae volutpat non, feugiat varius nulla. Sed laoreet luctus sagittis. Donec vehicula condimentum nulla vel placerat. Aliquam lobortis eget sapien sit amet lacinia. Aliquam commodo, dolor eget placerat porta, ante tellus dapibus velit, et dictum tellus diam ut arcu. Maecenas eget suscipit orci.',
+      story: 'Stijn zorgt ervoor dat techniek en mensen elkaar vinden. Hij begeleidt klanten van wens tot implementatie en houdt het proces soepel en persoonlijk. Zijn kracht ligt in het verbinden van bouwkeet tot boardroom, met oog voor resultaat én gebruiksgemak. Stijn is ook verantwoordelijk voor het commerciële stuk en duurzaamheid binnen On-Track.',
     },
     {
       name: 'Rien van der Scheur',
       role: 'Mede-eigenaar',
       email: 'rvdscheur@on-track.nl',
       img: rienhImg,
-      story: 'Nunc sit amet ornare lectus. Donec non velit ut ex tristique ornare. Nulla at magna enim. Integer quis dui eget metus egestas lacinia sed vel arcu. Sed ultrices, eros in finibus tempus, orci lorem scelerisque est, nec efficitur ligula elit sit amet sem. Maecenas pellentesque lectus a iaculis euismod. Sed a scelerisque lorem, id placerat purus. Etiam quis nunc dui. Nam pulvinar luctus facilisis. Duis at pharetra nibh. Nullam nec mi eget justo gravida faucibus. Phasellus sit amet ullamcorper nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      story: 'Rien beweegt zich moeiteloos tussen techniek en praktijk. Hij richt zich op de gebruikerservaring, BIM-processen en productontwikkeling. Zijn kracht ligt in het verbinden van systemen, mensen en informatie. Met zijn brede ervaring zorgt hij dat digitale oplossingen écht aansluiten op de werkvloer.',
     },
   ],
 };

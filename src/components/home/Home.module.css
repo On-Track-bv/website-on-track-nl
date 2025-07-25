@@ -1,11 +1,11 @@
 .wrapper {
-  position: relative;
+  position: center;
   box-sizing: border-box;
   background-color: var(----my-bg) !important;
 }
 
 .inner {
-  position: relative;
+  position: center;
   padding-top: 180px;
   padding-bottom: 120px;
 
@@ -17,7 +17,7 @@
 
 .title {
   font-family: Outfit, var(--mantine-font-family);
-  font-size: 100px;
+  font-size: 130px;
   font-weight: 900;
   line-height: 1.1;
   margin: 0;
@@ -40,6 +40,7 @@
 }
 
 .controls {
+  
   margin-top: calc(var(--mantine-spacing-xl) * 2);
 
   @media (max-width: 48em) {
@@ -64,6 +65,9 @@
   border: 2px solid var(--my-primary) !important;
   background: transparent !important;
   font-weight: 700;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10), 0 1.5px 16px 0 rgba(12,38,89,0.10);
+  border: 1px solid var(--my-inputfields, #fff);
+  background: var(--my-bg, #fff);
 }
 
 .githubButton:hover {
@@ -76,6 +80,16 @@
   border: none !important;
   font-weight: 700 !important;
   transition: background 0.2s;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10), 0 1.5px 16px 0 rgba(12,38,89,0.10);
+  border: 1px solid var(--my-inputfields, #fff);
+  background: var(--my-bg, #fff);
+  text-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 1px 1px rgba(0,0,0,0.15) !important;
+}
+/* For dark mode, override with a darker shadow and border */
+[data-mantine-color-scheme='dark'] .gradientButton.githubButton {
+  box-shadow: 0 8px 32px 0 rgba(12,38,89,0.25), 0 1.5px 16px 0 rgba(0,0,0,0.18);
+  border: 1px solid #0c2659;
+  background: var(--my-bg, #0c2659);
 }
 
 .gradientButton:hover {

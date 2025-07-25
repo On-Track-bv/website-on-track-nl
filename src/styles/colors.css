@@ -10,6 +10,7 @@
   --my-text: #0c2659;
   --my-text-neg: white;
   --my-subtext: #949494;
+  --my-subtext2: #949494;
   --my-hover:  #cfddfa;
   --my-inputfields:  #edf2fc;
   --my-inputinvalid:  #d93d1a;
@@ -28,6 +29,7 @@
   --my-text: white;
   --my-text-neg: #0c2659;
   --my-subtext: #cfddfa;
+  --my-subtext2: #cccccc;
   --my-hover: #264175;
   --my-inputfields:  #264175;
   --my-inputinvalid:  #d93d1a;

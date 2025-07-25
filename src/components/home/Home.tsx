@@ -49,9 +49,9 @@ export function Home() {
                     {t.title}
                 </h1>
 
-                <Text className={classes.description} >
+                {/* <Text className={classes.description} >
                     {t.description}
-                </Text>
+                </Text> */}
 
                 <Group className={classes.controls}>
                     <Button

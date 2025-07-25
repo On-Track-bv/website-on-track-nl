@@ -4,11 +4,10 @@ import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from '@mantine/hooks';
 import { useMantineColorScheme } from '@mantine/core';
-import onTrackBeeldmerkLight from '../../assets/on-track-beeldmerk.svg';
-import onTrackBeeldmerkDark from '../../assets/on-track-beeldmerk_wit.svg';
+import onTrackBeeldmerkLight from '../../assets/on-track/on-track-beeldmerk.svg';
+import onTrackBeeldmerkDark from '../../assets/on-track/on-track-beeldmerk_wit.svg';
 import classes from './Header.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
-
 
 const linksNl = [
     { link: '#top', label: 'Home' },
@@ -34,52 +33,57 @@ export function Header() {
 
     const links = lang === 'nl' ? linksNl : linksEn;
 
-  const items = links.map((link) => (
-    <a
-        key={link.label}
-        href={link.link}
-        className={classes.link}
-        data-active={active === link.link || undefined}
-        onClick={(event) => {
-            event.preventDefault();
-            if (link.link === '#top') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (link.link.startsWith('#')) {
-                const el = document.getElementById(link.link.substring(1));
-                if (el) {
-                    el.scrollIntoView({ behavior: 'smooth' });
+    const items = links.map((link) => (
+        <a
+            key={link.label}
+            href={link.link}
+            className={classes.link}
+            data-active={active === link.link || undefined}
+            onClick={(event) => {
+                event.preventDefault();
+                if (link.link === '#top') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (link.link.startsWith('#')) {
+                    const el = document.getElementById(link.link.substring(1));
+                    if (el) {
+                        // Offset scroll to account for fixed header
+                        const yOffset = -80; // Adjust this value to your header height
+                        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
                 }
-            }
-            // Remove: setActive(link.link);
-        }}
-    >
-        {link.label}
-    </a>
-));
+                // Remove: setActive(link.link);
+            }}
+        >
+            {link.label}
+        </a>
+    ));
+
     const sectionIds = links.map(link => link.link.replace('#', ''));
 
-   useEffect(() => {
-    const handleScroll = () => {
-        const scrollPosition = window.scrollY + 100; // offset for header height
-        let currentSection = "#top"; // fallback to Home
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + 100; // offset for header height
+            let currentSection = "#top"; // fallback to Home
 
-        for (const id of sectionIds) {
-            const el = document.getElementById(id);
-            if (el) {
-                const top = el.offsetTop;
-                if (scrollPosition >= top) {
-                    currentSection = `#${id}`;
+            for (const id of sectionIds) {
+                const el = document.getElementById(id);
+                if (el) {
+                    const top = el.offsetTop;
+                    if (scrollPosition >= top) {
+                        currentSection = `#${id}`;
+                    }
                 }
             }
-        }
-        if (active !== currentSection) {
-            setActive(currentSection);
-        }
-    };
+            if (active !== currentSection) {
+                setActive(currentSection);
+            }
+        };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-}, [sectionIds, active]);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [sectionIds, active]);
+
     return (
         <header className={classes.header}>
             <Container size="lg" className={classes.inner}>
