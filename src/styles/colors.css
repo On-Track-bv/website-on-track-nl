@@ -1,0 +1,37 @@
+:root {
+  --my-primary: #0c2659;
+  --my-primary-dark: white;
+  --my-accent: #f28f38;
+  --my-accent2: #589ea6;
+  --my-accentlight: #f7ce91;
+  --my-accent2light: #a4d7db;
+  --my-bg: white;
+  --my-bgheader: #f8f9fa;
+  --my-text: #0c2659;
+  --my-text-neg: white;
+  --my-subtext: #949494;
+  --my-subtext2: #949494;
+  --my-hover:  #cfddfa;
+  --my-inputfields:  #edf2fc;
+  --my-inputinvalid:  #d93d1a;
+  --my-gradient: linear-gradient(90deg, #589ea6 0%, #a4d7db 30%, #f7ce91 60%, #f28f38 100%);
+}
+
+[data-mantine-color-scheme='dark'] {
+  --my-primary: white;
+  --my-primary-dark: #0c2659;
+  --my-accent: #f28f38;
+  --my-accent2: #589ea6;
+  --my-accentlight: #f7ce91;
+  --my-accent2light: #a4d7db;
+  --my-bg: #0c2659;
+  --my-bgheader: #264175;
+  --my-text: white;
+  --my-text-neg: #0c2659;
+  --my-subtext: #cfddfa;
+  --my-subtext2: #cccccc;
+  --my-hover: #264175;
+  --my-inputfields:  #264175;
+  --my-inputinvalid:  #d93d1a;
+  --my-gradient: linear-gradient(90deg, #589ea6 0%, #a4d7db 30%, #f7ce91 60%, #f28f38 100%);
+}

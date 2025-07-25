@@ -1,0 +1,180 @@
+.wrapper {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: var(--my-bg);
+  overflow-x: hidden;
+}
+.section {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  min-height: 800px;
+  margin: 0 0 48px 0; /* 48px space below each section */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    border-radius: 32px;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10), 0 1.5px 16px 0 rgba(12,38,89,0.10);
+  border: 1px solid var(--my-inputfields, #fff);
+  background: var(--my-bg, #fff);
+}
+/* For dark mode, override with a darker shadow and border */
+[data-mantine-color-scheme='dark'] .section {
+  box-shadow: 0 8px 32px 0 rgba(12,38,89,0.25), 0 1.5px 16px 0 rgba(0,0,0,0.18);
+  border: 1px solid #0c2659;
+  background: var(--my-bg, #0c2659);
+}
+.fullImage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  min-height: 420px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  z-index: 0;
+  opacity: 0.95;
+  filter: brightness(0.7) blur(1px);
+  transition: background-position 0.2s linear;
+}
+.visionImage {
+  left: calc(50% - 5%); /* 100px more to the left */
+}
+
+.missionImage {
+  left: calc(50% + 5%); /* 100px more to the right */
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  flex-direction: column; /* <-- voeg deze toe */
+}
+
+.card {
+  background: var(--my-inputfields);
+  border-radius: var(--mantine-radius-lg);
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.10);
+  padding: 2.5rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid var(--my-primary);
+  backdrop-filter: blur(0.5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--my-primary);
+  margin-bottom: 1.2rem;
+  font-family: 'Nunito', Arial, sans-serif;
+  text-align: center;
+}
+
+.text {
+  font-size: 1.25rem;
+  color: var(--my-text);
+  font-family: 'Nunito', Arial, sans-serif;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .card {
+    max-width: 100%;
+    padding: 2rem 1rem;
+  }
+  .section, .fullImage, .content {
+    min-height: 280px;
+  }
+}
+
+
+
+.plainTitle {
+  color: #fff !important;
+  font-family: 'Nunito', Arial, sans-serif;
+  font-weight: 900 !important;
+  font-size: 8rem !important;
+  text-align: center !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0.5em 0 !important;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 1px 1px rgba(0,0,0,0.15) !important;
+  font-size: clamp(2rem, 6vw, 8rem) !important;
+}
+
+.plainText {
+  color: #fff !important;
+  font-family: 'Nunito', Arial, sans-serif;
+  font-weight: 600 !important;
+  font-size: 3rem !important;
+  text-align: center !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0.5em 0 !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.30), 0 1px 1px rgba(0,0,0,0.12) !important;
+  font-size: clamp(1.1rem, 3vw, 3rem) !important;
+}
+
+/* Responsive: maak tekst kleiner op tablets */
+@media (max-width: 900px) {
+  .plainTitle {
+    font-size: 3rem !important;
+    padding: 0.3em 0 !important;
+  }
+  .plainText {
+    font-size: 1.5rem !important;
+    padding: 0.3em 0 !important;
+  }
+}
+
+/* Responsive: maak tekst nog kleiner op mobiel */
+@media (max-width: 600px) {
+  .plainTitle {
+    font-size: 2rem !important;
+    padding: 0.2em 0 !important;
+  }
+  .plainText {
+    font-size: 1rem !important;
+    padding: 0.2em 0 !important;
+  }
+}.centeredText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* De basis-centrering */
+  transform: translate(-50%, -50%);
+  max-width: 900px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+/* Vision iets naar rechts */
+.visionTextShift {
+  transform: translate(calc(-50% + 5vw), -50%) !important;
+}
+
+/* Mission iets naar links */
+.missionTextShift {
+  transform: translate(calc(-50% - 5vw), -50%) !important;
+}

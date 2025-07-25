@@ -1,0 +1,133 @@
+.form {
+  background: var(--my-bg);
+  padding: 2rem;
+  border-radius: var(--mantine-radius-md);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.form .input,
+.form .react-tel-input .form-control {
+  background: var(--my-inputfields);
+  color: var(--my-text);
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--my-primary);
+  font-size: var(--mantine-font-size-sm);
+  font-family: 'Nunito', Arial, sans-serif;
+  height: 40px;
+  width: 100%;
+  padding-left: 48px;
+}
+
+.title {
+  color: var(--my-primary);
+  font-family: 'Nunito', Arial, sans-serif;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.input {
+  background: var(--my-inputfields) ;
+  color: var(--my-text) !important ; /* text that is being types */
+  border-radius: var(--mantine-radius-sm) ;
+  border: 1px solid var(--my-primary) ;
+}
+
+.label {
+  color: var(--my-primary)!important  ;
+  font-weight: 500; /* Mantine gebruikt 500 */
+  font-family: 'Nunito', Arial, sans-serif;
+  font-size: var(--input-label-size, var(--mantine-font-size-sm));;
+  margin-bottom: 0.5rem;
+  display: inline-block; /* Mantine gebruikt inline-block */
+  word-break: break-word;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+.input::placeholder,
+.react-tel-input .form-control::placeholder {
+  color: var(--my-subtext) !important;
+  opacity: 1 !important; /* ensures full color */
+}
+.button {
+  background: var(--my-primary);
+  color: var(--my-text-neg);
+  font-weight: 700;
+  border-radius: var(--mantine-radius-sm);
+  transition: background 0.2s;
+}
+.button:hover,
+.button[data-hover] {
+  background: var(--my-accent);
+  color: var(--my-text-neg);
+}
+.button:disabled,
+.button[disabled] {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  border: none;
+  opacity: 0.7;
+}
+.captchaBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+.feedback {
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--my-primary);
+}
+.input,
+.react-tel-input .form-control {
+  background: var(--my-hover);
+  color: var(--my-text);
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--my-primary);
+  font-size: var(--mantine-font-size-sm);
+  font-family: 'Nunito', Arial, sans-serif;
+  height: 40px;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 48px !important; /* space for flag */
+}
+
+.react-tel-input .form-control:focus {
+  border-color: var(--my-accent);
+  outline: none;
+}
+
+.react-tel-input .flag-dropdown {
+  border-radius: var(--mantine-radius-sm) 0 0 var(--mantine-radius-sm);
+  border: 1px solid var(--my-primary);
+  background: var(--my-hover);
+}
+
+.react-tel-input .selected-flag {
+  background: var(--my-hover);
+}
+
+.react-tel-input .country-list {
+  font-family: 'Nunito', Arial, sans-serif;
+  background: var(--my-bg);
+  color: var(--my-text);
+}
+input[data-invalid],
+textarea[data-invalid],
+.react-tel-input .form-control[data-invalid] {
+  border-color: var(--my-inputinvalid) !important;
+}
+input[data-error="true"],
+textarea[data-error="true"],
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+.react-tel-input .form-control[data-invalid] {
+  border-color: var(--my-inputinvalid) !important;
+}
+.emailHighlight {
+  color: var(--my-accent);
+  font-weight: 700;
+}

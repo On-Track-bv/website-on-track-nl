@@ -1,18 +1,37 @@
-import { useState } from 'react';
-import { Burger, Container, Group } from '@mantine/core';
-import onTrackLogo from '../../assets/on-track.png';
+import { useEffect, useState } from 'react';
+import { Burger, Container, Group, ActionIcon, Button } from '@mantine/core';
+import { IconSun, IconMoon } from '@tabler/icons-react';
+import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from '@mantine/hooks';
+import { useMantineColorScheme } from '@mantine/core';
+import onTrackBeeldmerkLight from '../../assets/on-track/on-track-beeldmerk.svg';
+import onTrackBeeldmerkDark from '../../assets/on-track/on-track-beeldmerk_wit.svg';
 import classes from './Header.module.css';
+import { useLanguage } from '../../contexts/LanguageContext';
 
-const links: { link: string; label: string }[] = [
+const linksNl = [
     { link: '#top', label: 'Home' },
-    // { link: '#contact-us', label: 'Contact' },
+    { link: '#why', label: 'Visie en missie' },
+    { link: '#what', label: 'Diensten' },
+    { link: '#who', label: 'Over ons' },
+    { link: '#contact-us', label: 'Contact' },
 ];
 
+const linksEn = [
+    { link: '#top', label: 'Home' },
+    { link: '#why', label: 'Vision and mission' },
+    { link: '#what', label: 'Services' },
+    { link: '#who', label: 'About us' },
+    { link: '#contact-us', label: 'Contact' },
+];
 
 export function Header() {
     const [opened, { toggle }] = useDisclosure(false);
-    const [active, setActive] = useState(links[0].link);
+    const [active, setActive] = useState(linksNl[0].link);
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const { lang, setLang } = useLanguage();
+
+    const links = lang === 'nl' ? linksNl : linksEn;
 
     const items = links.map((link) => (
         <a
@@ -22,34 +41,91 @@ export function Header() {
             data-active={active === link.link || undefined}
             onClick={(event) => {
                 event.preventDefault();
-                setActive(link.link);
                 if (link.link === '#top') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else if (link.link.startsWith('#')) {
                     const el = document.getElementById(link.link.substring(1));
                     if (el) {
-                        el.scrollIntoView({ behavior: 'smooth' });
+                        // Offset scroll to account for fixed header
+                        const yOffset = -80; // Adjust this value to your header height
+                        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
                     }
                 }
+                // Remove: setActive(link.link);
             }}
         >
             {link.label}
         </a>
     ));
 
+    const sectionIds = links.map(link => link.link.replace('#', ''));
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + 100; // offset for header height
+            let currentSection = "#top"; // fallback to Home
+
+            for (const id of sectionIds) {
+                const el = document.getElementById(id);
+                if (el) {
+                    const top = el.offsetTop;
+                    if (scrollPosition >= top) {
+                        currentSection = `#${id}`;
+                    }
+                }
+            }
+            if (active !== currentSection) {
+                setActive(currentSection);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [sectionIds, active]);
+
     return (
         <header className={classes.header}>
-            <Container size="md" className={classes.inner}>
-
+            <Container size="lg" className={classes.inner}>
                 <Group gap={5} visibleFrom="xs">
                     <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                        <img src={onTrackLogo} alt="On-Track logo" style={{ height: 36, cursor: 'pointer' }} />
+                        <img
+                            src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
+                            alt="On-Track logo"
+                            style={{ height: 45, cursor: 'pointer' }}
+                        />
                     </a>
                 </Group>
-                <Group gap={5} visibleFrom="xs">
-                    {items}
-                </Group>
-
+                <div className={classes.rightGroups}>
+                    <Group gap={6} visibleFrom="xs">
+                        {items}
+                    </Group>
+                    <Group>
+                        <Button
+                            className={classes.languageButton}
+                            variant="subtle"
+                            size="xs"
+                            onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}
+                            leftSection={
+                                lang === 'nl'
+                                    ? <ReactCountryFlag countryCode="GB" svg style={{ width: 20, height: 20 }} />
+                                    : <ReactCountryFlag countryCode="NL" svg style={{ width: 20, height: 20 }} />
+                            }
+                        >
+                        </Button>
+                        <ActionIcon
+                            variant="outline"
+                            color="var(--my-primary-dark)"
+                            className={classes.actionIcon}
+                            onClick={() => toggleColorScheme()}
+                            title="Toggle color scheme"
+                        >
+                            {colorScheme === 'dark'
+                                ? <IconSun size={18} color="var(--my-primary)" />
+                                : <IconMoon size={18} color="var(--my-primary)" />}
+                        </ActionIcon>
+                    </Group>
+                </div>
                 <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
             </Container>
         </header>

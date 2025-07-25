@@ -1,37 +1,62 @@
 .header {
-  height: 56px;
+  height: 70px;
   margin-bottom: 120px;
-  background-color: var(--mantine-color-body);
+  background-color: var( --my-bgheader);
   border-bottom: 1px solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
 .inner {
-  height: 56px;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
+.rightGroups {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px; /* Adjust spacing as needed */
+  flex: 1;
+}
+.actionIcon:hover,
+.actionIcon[data-hover] {
+  background-color: var(--my-hover) !important;
+}
+.languageButton button,
+.languageButton:hover,
+.languageButton[data-hover] {
+  background-color: var(--my-hover) !important;
+}
 .link {
   display: block;
   line-height: 1;
   padding: 8px 12px;
   border-radius: var(--mantine-radius-sm);
   text-decoration: none;
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  color: var(--my-text);
   font-size: var(--mantine-font-size-sm);
-  font-weight: 500;
+  font-weight: 900;
+  
 
-  @mixin hover {
-    background-color: light-dark(
-      var(--mantine-color-gray-0),
-      var(--mantine-color-dark-6)
-    );
-  }
 
   [data-mantine-color-scheme] &[data-active] {
-    background-color: var(--mantine-color-blue-filled);
-    color: var(--mantine-color-white);
+    background-color: var(--my-primary);
+    color: var(--my-text-neg);
   }
+}
+.link:hover,
+.link[data-hover] {
+  background-color: var(--my-hover);
+  color: var(--my-primary);
+  border-color: var(--my-primary);
+}
+.phoneContainer {
+  margin-bottom: 1rem;
+}
+.phoneButton {
+  background: var(--my-primary);
+}
+.phoneDropdown {
+  background: var(--my-bg);
 }

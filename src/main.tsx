@@ -4,12 +4,18 @@ import './index.css'
 import App from './App.tsx'
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import './styles/colors.css';
+import './styles/fonts.css';
+import { theme } from './theme';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider>
+    <MantineProvider theme={theme}>
+      <LanguageProvider>
       <App />
+      </LanguageProvider>
     </MantineProvider>
   </StrictMode>,
 )
