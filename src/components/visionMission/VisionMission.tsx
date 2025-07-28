@@ -3,11 +3,11 @@ import classes from './VisionMission.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useRef, useEffect, useState } from 'react';
 
-import visionImg from '../../assets/Amsterdam-zuidas.png';
-import missionImg from '../../assets/Verbinding.png';
-
-// const visionImg = "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1600&q=80";
-// const missionImg = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80";
+// Import both low-res and high-res images
+import visionImg from '../../assets/Amsterdam-zuidas.jpg';
+import visionImgSmall from '../../assets/Amsterdam-zuidas_small.jpg';
+import missionImg from '../../assets/Verbinding.jpg';
+import missionImgSmall from '../../assets/Verbinding_small.jpg';
 
 const texts = {
   en: {
@@ -24,6 +24,25 @@ const texts = {
   },
 };
 
+function useLazyImage(ref: React.RefObject<HTMLDivElement| null>) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setLoaded(true);
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [ref]);
+
+  return loaded;
+}
+
 export function VisionMission() {
   const { lang } = useLanguage();
   const t = texts[lang];
@@ -31,7 +50,7 @@ export function VisionMission() {
   const visionRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
 
-  // Dummy state to force re-render
+  // Dummy state to force re-render for parallax
   const [, setTick] = useState(0);
 
   useEffect(() => {
@@ -57,36 +76,52 @@ export function VisionMission() {
     return { backgroundPosition: `50% ${parallaxY}%` };
   };
 
+  // Lazy load logic
+  const visionLoaded = useLazyImage(visionRef);
+  const missionLoaded = useLazyImage(missionRef);
+
   return (
     <div className={classes.wrapper}>
       <div className={`${classes.section} ${classes.visionImage}`} ref={visionRef}>
         <div
           className={classes.fullImage}
           style={{
-            backgroundImage: `url(${visionImg})`,
+            backgroundImage: visionLoaded
+              ? `url(${visionImg})`
+              : `url(${visionImgSmall})`,
             ...getParallax(visionRef),
+            filter: visionLoaded
+              ? 'brightness(0.7) blur(1px)'
+              : 'brightness(0.7) blur(8px)',
+            transition: 'filter 0.7s, background-image 0.7s',
           }}
         />
-      <Container size="xxl" className={classes.content}>
+        <Container size="xxl" className={classes.content}>
           <div className={`${classes.centeredText} ${classes.visionTextShift}`}>
-    <Title order={2} className={classes.plainTitle}>{t.visionTitle}</Title>
-    <Text className={classes.plainText}>{t.vision}</Text>
-      </div>
-  </Container>
+            <Title order={2} className={classes.plainTitle}>{t.visionTitle}</Title>
+            <Text className={classes.plainText}>{t.vision}</Text>
+          </div>
+        </Container>
       </div>
       <div className={`${classes.section} ${classes.missionImage}`} ref={missionRef}>
         <div
           className={classes.fullImage}
           style={{
-            backgroundImage: `url(${missionImg})`,
+            backgroundImage: missionLoaded
+              ? `url(${missionImg})`
+              : `url(${missionImgSmall})`,
             ...getParallax(missionRef),
+            filter: missionLoaded
+              ? 'brightness(0.7) blur(1px)'
+              : 'brightness(0.7) blur(8px)',
+            transition: 'filter 0.7s, background-image 0.7s',
           }}
         />
         <Container size="xxl" className={classes.content}>
           <div className={`${classes.centeredText} ${classes.missionTextShift}`}>
-          <Title order={2} className={classes.plainTitle}>{t.missionTitle}</Title>
-          <Text className={classes.plainText}>{t.mission}</Text>
-      </div>
+            <Title order={2} className={classes.plainTitle}>{t.missionTitle}</Title>
+            <Text className={classes.plainText}>{t.mission}</Text>
+          </div>
         </Container>
       </div>
     </div>
