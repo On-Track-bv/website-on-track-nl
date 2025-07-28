@@ -52,11 +52,15 @@
   height: 54px;
   padding-left: 38px;
   padding-right: 38px;
+  min-width: 0 !important; /* Voorkom dat de button te breed wordt */
+  font-size: 1.25rem !important; /* Maak tekst iets kleiner en schaalbaar */
+  white-space: normal !important; /* Laat tekst afbreken */
 
   @media (max-width: 48em) {
-    height: 54px;
-    padding-left: 18px;
-    padding-right: 18px;
+    height: 48px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.90rem !important;
     flex: 1;
   }
 }

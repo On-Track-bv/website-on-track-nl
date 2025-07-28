@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Burger, Container, Group, ActionIcon, Button } from '@mantine/core';
+import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from '@mantine/hooks';
@@ -26,7 +26,7 @@ const linksEn = [
 ];
 
 export function Header() {
-    const [opened, { toggle }] = useDisclosure(false);
+    const [opened, { toggle, close }] = useDisclosure(false);
     const [active, setActive] = useState(linksNl[0].link);
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const { lang, setLang } = useLanguage();
@@ -46,13 +46,11 @@ export function Header() {
                 } else if (link.link.startsWith('#')) {
                     const el = document.getElementById(link.link.substring(1));
                     if (el) {
-                        // Offset scroll to account for fixed header
-                        const yOffset = -80; // Adjust this value to your header height
+                        const yOffset = -80;
                         const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
                         window.scrollTo({ top: y, behavior: 'smooth' });
                     }
                 }
-                // Remove: setActive(link.link);
             }}
         >
             {link.label}
@@ -63,9 +61,8 @@ export function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollPosition = window.scrollY + 100; // offset for header height
-            let currentSection = "#top"; // fallback to Home
-
+            const scrollPosition = window.scrollY + 100;
+            let currentSection = "#top";
             for (const id of sectionIds) {
                 const el = document.getElementById(id);
                 if (el) {
@@ -79,7 +76,6 @@ export function Header() {
                 setActive(currentSection);
             }
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [sectionIds, active]);
@@ -87,20 +83,19 @@ export function Header() {
     return (
         <header className={classes.header}>
             <Container size="lg" className={classes.inner}>
-                <Group gap={5} visibleFrom="xs">
-                    <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-                        <img
-                            src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
-                            alt="On-Track logo"
-                            style={{ height: 45, cursor: 'pointer' }}
-                        />
-                    </a>
-                </Group>
+                {/* Logo altijd zichtbaar */}
+                <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                    <img
+                        src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
+                        alt="On-Track logo"
+                        style={{ height: 45, cursor: 'pointer' }}
+                    />
+                </a>
                 <div className={classes.rightGroups}>
                     <Group gap={6} visibleFrom="xs">
                         {items}
                     </Group>
-                    <Group>
+                    <Group visibleFrom="xs">
                         <Button
                             className={classes.languageButton}
                             variant="subtle"
@@ -111,8 +106,7 @@ export function Header() {
                                     ? <ReactCountryFlag countryCode="GB" svg style={{ width: 20, height: 20 }} />
                                     : <ReactCountryFlag countryCode="NL" svg style={{ width: 20, height: 20 }} />
                             }
-                        >
-                        </Button>
+                        />
                         <ActionIcon
                             variant="outline"
                             color="var(--my-primary-dark)"
@@ -128,6 +122,50 @@ export function Header() {
                 </div>
                 <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
             </Container>
+            {/* Drawer voor mobiel menu */}
+            <Drawer
+                opened={opened}
+                onClose={close}
+                size="xs"
+                padding="md"
+                title={
+                    <img
+                        src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
+                        alt="On-Track logo"
+                        style={{ height: 32 }}
+                    />
+                }
+            >
+                <nav>
+                    <Stack gap="md">
+                        {items}
+                    </Stack>
+                    <Group gap="md" mt="xl" justify="center">
+                        <Button
+                            className={classes.languageButton}
+                            variant="subtle"
+                            size="xs"
+                            onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}
+                            leftSection={
+                                lang === 'nl'
+                                    ? <ReactCountryFlag countryCode="GB" svg style={{ width: 20, height: 20 }} />
+                                    : <ReactCountryFlag countryCode="NL" svg style={{ width: 20, height: 20 }} />
+                            }
+                        />
+                        <ActionIcon
+                            variant="outline"
+                            color="var(--my-primary-dark)"
+                            className={classes.actionIcon}
+                            onClick={() => toggleColorScheme()}
+                            title="Toggle color scheme"
+                        >
+                            {colorScheme === 'dark'
+                                ? <IconSun size={18} color="var(--my-primary)" />
+                                : <IconMoon size={18} color="var(--my-primary)" />}
+                        </ActionIcon>
+                    </Group>
+                </nav>
+            </Drawer>
         </header>
     );
 }

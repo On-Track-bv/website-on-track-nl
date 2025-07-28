@@ -169,6 +169,16 @@
   justify-content: center;
   z-index: 2;
 }
+@media (max-width: 600px) {
+  .centeredText {
+    max-width: 98vw !important;
+    width: 80vw !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
 /* Vision iets naar rechts */
 .visionTextShift {
   transform: translate(calc(-50% + 5vw), -50%) !important;
