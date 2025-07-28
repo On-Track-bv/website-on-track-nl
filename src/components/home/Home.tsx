@@ -57,6 +57,11 @@ export function Home() {
                     <Button
                         size="xl"
                         className={`${classes.control} ${classes.gradientButton}`}
+                          style={{
+                                minWidth: 0,
+                                whiteSpace: 'normal',
+                                fontSize: '1.25rem',
+                            }}
                         onClick={() => {
                             const el = document.getElementById('contact-us');
                             if (el) {
@@ -74,6 +79,11 @@ export function Home() {
                         size="xl"
                         variant="default"
   className={`${classes.control} ${classes.githubButton}`}
+   style={{
+                                minWidth: 0,
+                                whiteSpace: 'normal',
+                                fontSize: '1.25rem',
+                            }}
                         leftSection={<GithubIcon size={20} />}
                     >
                         {t.github}
