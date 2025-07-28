@@ -38,10 +38,30 @@ const disclaimerNl = `De content op deze website is door On-Track B.V. met de gr
 
 const disclaimerEn = `The content on this website has been compiled with the greatest possible care by On-Track B.V., but we accept no liability for any inaccuracies in the content. On-Track B.V. is not responsible for the content of files and/or websites linked to this website. Unauthorized or improper use of the content or parts thereof infringes intellectual property rights. Permission to use the displayed content or parts thereof in publicly accessible places may only be granted with written consent from On-Track B.V. For questions, you can contact us by phone or email.`;
 
-  return (
+    return (
         <footer className={classes.footer}>
-            {/* ...existing code... */}
-            <Container className={classes.afterFooter}>
+            <Container className={classes.inner}>
+                <div className={classes.logo}>
+                    <img
+                        src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
+                        alt="On-Track logo"
+                        style={{ height: 45, marginBottom: 16 }}
+                    />
+                    {address.map((line, idx) => (
+                        <Text key={idx} size="xs" c="dimmed" className={classes.description}>
+                            {line}
+                        </Text>
+                    ))}
+                </div>
+                <div className={classes.logo}>
+                    <img
+                        src={colorScheme === 'dark' ? onTrackLogoDark : onTrackLogoLight}
+                        alt="On-Track logo"
+                        style={{ height: 150 }}
+                    />
+                </div>
+            </Container>
+             <Container className={classes.afterFooter}>
                 <Text size="sm" c='var(--my-subtext)'>
                     {copyright}
                 </Text>
