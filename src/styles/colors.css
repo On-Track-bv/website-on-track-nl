@@ -15,7 +15,7 @@
   --my-inputfields:  #edf2fc;
   --my-inputinvalid:  #d93d1a;
   --my-gradient: linear-gradient(90deg, #589ea6 0%, #a4d7db 30%, #f7ce91 60%, #f28f38 100%);
-  --my-icons: #cfddfa;
+  --my-icons: #e1e8f5;
 }
 
 [data-mantine-color-scheme='dark'] {
