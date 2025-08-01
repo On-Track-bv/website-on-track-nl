@@ -314,7 +314,7 @@ export function Home() {
                         transition: 'opacity 0.18s',
                       }}
                     >
-                      <Icon size={90} style={{ color: hovered ? '#0c2659' : 'var(--my-bg)' }} />
+                      <Icon size={90} style={{ color: 'var(--my-icons)' }} />
                     </span>
                     {hovered ? null : (
                       <span
@@ -359,7 +359,7 @@ export function Home() {
                 case 'kringverjaardag':
                   return lang === 'en'
                     ? <>All your <span className={classes.gradientText}>project info</span> in one place</>
-                    : <>Alle <span className={classes.gradientText}>projectinformatie</span> centraal</>;
+                    : <>Alle <span className={classes.gradientText}>project informatie</span> centraal</>;
                 case 'bouwinfra':
                   return lang === 'en'
                     ? <>Get more from your <span className={classes.gradientText}>BIM data</span></>
@@ -374,8 +374,8 @@ export function Home() {
                     : <>Help je klanten met <span className={classes.gradientText}>betere BIM-data</span></>;
                 case 'bimmanager':
                   return lang === 'en'
-                    ? <>From <span className={classes.gradientText}>Excel</span> to database-driven BIM</>
-                    : <>Van <span className={classes.gradientText}>Excel</span> naar database-gedreven BIM</>;
+                    ? <>From Excel to <span className={classes.gradientText}>database-driven</span>  BIM</>
+                    : <>Van Excel naar <span className={classes.gradientText}>database-gedreven</span> BIM</>;
                 case 'linkeddata':
                   return lang === 'en'
                     ? <>Make <span className={classes.gradientText}>LinkedData</span> practical in BIM</>
@@ -403,11 +403,30 @@ export function Home() {
           })()}
         </h1>
         {selectedRole ? (
-          <Text className={classes.description} mb="xl" mt="md" style={{ fontSize: '1.2rem', textAlign: 'center' }}>
+          <Text
+            className={classes.description}
+            mb="xl"
+            mt="md"
+            style={{
+              fontSize: '1.2rem',
+              textAlign: 'center',
+              // Responsive font size for mobile
+              ...(window.innerWidth < 600 ? { fontSize: '1rem' } : {}),
+            }}
+          >
             {selectedRole.desc[lang]}
           </Text>
         ) : (
-          <Text className={classes.description} mb="xl" mt="md" style={{ fontSize: '1.2rem', textAlign: 'center' }}>
+          <Text
+            className={classes.description}
+            mb="xl"
+            mt="md"
+            style={{
+              fontSize: '1.2rem',
+              textAlign: 'center',
+              ...(window.innerWidth < 600 ? { fontSize: '1rem' } : {}),
+            }}
+          >
             {lang === 'en'
               ? <>Define what information you need and we will take care of every necessary connection. Between your programs and with your people.</>
               : <>Stel vast welke informatie je nodig hebt, dan zorgen wij voor elke noodzakelijke verbinding. Tussen jouw programma's en met jouw mensen.</>
