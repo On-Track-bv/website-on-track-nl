@@ -2,7 +2,7 @@
 
 
 
-import { Button, Container, Group, Modal, Stack, Text, Title, ActionIcon } from '@mantine/core';
+import { Button, Container, Group, Modal, Text, Title, ActionIcon } from '@mantine/core';
 import {
   IconUsers,
   IconBuilding,
