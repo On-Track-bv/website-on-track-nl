@@ -3,6 +3,30 @@
 
 
 import { Button, Container, Group, Modal, Stack, Text, Title, ActionIcon } from '@mantine/core';
+import {
+  IconUsers,
+  IconBuilding,
+  IconBriefcase,
+  IconUserCheck,
+  IconDatabase,
+  IconLink,
+  IconHome,
+  IconBuildingBank,
+  IconCode,
+  IconCake,
+} from '@tabler/icons-react';
+// Mapping van role.key naar een Tabler icon component
+const roleIcons = {
+  kringverjaardag: IconCake, // Taart met kaarsjes
+  bouwinfra: IconBuilding,
+  directie: IconBriefcase,
+  bimconsultant: IconUserCheck,
+  bimmanager: IconDatabase,
+  linkeddata: IconLink,
+  opdrachtgever: IconHome,
+  overheid: IconBuildingBank,
+  developer: IconCode,
+};
 import { GithubIcon } from '@mantinex/dev-icons';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from 'react-country-flag';
@@ -15,7 +39,7 @@ import { useState, useEffect } from 'react';
 
 
 const roles = [
-  {
+    {
     key: 'kringverjaardag',
     label: {
       nl: 'De kringverjaardag',
@@ -212,25 +236,107 @@ export function Home() {
           }
         >
           <div style={{ position: 'relative' }}>
-            <Text mb="md" fw={700} style={{ color: 'var(--my-accent)' }}>{t.chooseRole}</Text>
-            <Stack gap="xs">
-              {roles.map(r => (
-                <Button
-                  key={r.key}
-                  variant={role === r.key ? 'filled' : 'light'}
-                  color="blue"
-                  onClick={() => handleRoleSelect(r.key)}
-                  style={{
-                    background: role === r.key ? 'var(--my-gradient)' : undefined,
-                    color: role === r.key ? 'var(--my-primary-dark)' : 'var(--my-primary)',
-                    borderRadius: 8,
-                    fontWeight: 600
-                  }}
-                >
-                  {r.label[lang]}
-                </Button>
-              ))}
-            </Stack>
+            <Text mb="md" fw={700}  style={{ color: 'var(--my-primary)' }}>{t.chooseRole}</Text>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                gap: 24,
+                margin: '24px 0',
+              }}
+            >
+              {roles.map(r => {
+                const Icon = roleIcons[r.key as keyof typeof roleIcons] || IconUsers;
+                const isSelected = role === r.key;
+                // State for hover effect
+                const [hovered, setHovered] = useState(false);
+                // Only show icon (opacity 1, no text) on hover
+                return (
+                  <button
+                    key={r.key}
+                    onClick={() => handleRoleSelect(r.key)}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    style={{
+                      position: 'relative',
+                      background: isSelected ? 'var(--my-gradient)' : 'var(--my-bgheader)',
+                      color: isSelected ? 'var(--my-primary-dark)' : 'var(--my-primary)',
+                      borderRadius: 18,
+                      fontWeight: 600,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      aspectRatio: '1/1',
+                      minWidth: 120,
+                      minHeight: 120,
+                      maxWidth: 180,
+                      maxHeight: 180,
+                      padding: '0',
+                      fontSize: '0.95rem',
+                      boxShadow: isSelected
+                        ? '0 4px 24px 0 rgba(0,0,0,0.18)'
+                        : '0 1px 6px 0 rgba(0,0,0,0.08)',
+                      border: isSelected
+                        ? '2.5px solid var(--my-primary)'
+                        : '1.5px solid var(--my-bgheader)',
+                      cursor: 'pointer',
+                      transition: 'box-shadow 0.18s, transform 0.13s, border 0.18s',
+                      overflow: 'hidden',
+                    }}
+                    onMouseOver={e => {
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 32px 0 rgba(0,0,0,0.22)';
+                      (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.045)';
+                    }}
+                    onMouseOut={e => {
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = isSelected
+                        ? '0 4px 24px 0 rgba(0,0,0,0.18)'
+                        : '0 1px 6px 0 rgba(0,0,0,0.08)';
+                      (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+                    }}
+                  >
+                    <span
+                      style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        opacity: hovered ? 1 : 0.4,
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                        userSelect: 'none',
+                        width: 90,
+                        height: 90,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'opacity 0.18s',
+                      }}
+                    >
+                      <Icon size={90} style={{ color: hovered ? '#0c2659' : 'var(--my-bg)' }} />
+                    </span>
+                    {hovered ? null : (
+                      <span
+                        style={{
+                          position: 'relative',
+                          zIndex: 2,
+                          fontSize: '0.9em',
+                          textAlign: 'center',
+                          lineHeight: 1.25,
+                          padding: '0 10px',
+                          fontWeight: 700,
+                          color: 'inherit',
+                          textShadow: '0 1px 8px rgba(0,0,0,0.08)',
+                        }}
+                      >
+                        {r.label[lang]}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 24 }}>
               <Button
                 mt="md"
