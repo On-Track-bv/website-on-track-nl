@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack } from '@mantine/core';
+import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack, Box } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from '@mantine/hooks';
@@ -51,6 +51,8 @@ export function Header() {
                         window.scrollTo({ top: y, behavior: 'smooth' });
                     }
                 }
+                // Sluit de Drawer als hij open is (alleen op mobiel)
+                close();
             }}
         >
             {link.label}
@@ -135,8 +137,17 @@ export function Header() {
                         style={{ height: 32 }}
                     />
                 }
+                styles={{
+                    header: {
+                        background: 'var(--my-bgheader)', // kleur bovenin, bij het logo
+                    },
+                    content: {
+                        background: 'var(--my-bg)', // of je eigen kleur
+                    },
+                }}
             >
                 <nav>
+                    <Box mb="md" /> {/* Voeg whitespace toe boven de links */}
                     <Stack gap="md">
                         {items}
                     </Stack>
