@@ -11,7 +11,7 @@ import {
   IconCode,
 } from '@tabler/icons-react';
 import { useRole } from '../../contexts/RoleContext';
-import { Container, SimpleGrid, Text, ThemeIcon, Title } from '@mantine/core';
+import { Container, SimpleGrid, Text, Title } from '@mantine/core';
 import classes from './Services.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 
