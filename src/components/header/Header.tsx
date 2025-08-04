@@ -146,7 +146,7 @@ export function Header() {
                               </Avatar>
                             </ActionIcon>
                           </Menu.Target>
-                          <Menu.Dropdown className={classes.profileDropdown} style={{ maxHeight: 320, overflowY: 'auto' }}>
+                          <Menu.Dropdown className={classes.profileDropdown}>
                             <Menu.Label>Kies je profiel</Menu.Label>
                             {roles.map(r => (
                               <Menu.Item

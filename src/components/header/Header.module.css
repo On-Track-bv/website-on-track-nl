@@ -31,11 +31,20 @@
 }
 
 /* Huisstijl achtergrond voor de hele profiel-dropdown */
+/* Responsive max-height voor profiel-dropdown */
 .profileDropdown {
   background: var(--my-bgheader) !important;
   color: var(--my-primary) !important;
   border: none !important;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+  overflow-y: auto;
+  max-height: none;
+}
+
+@media (max-width: 600px) {
+  .profileDropdown {
+    max-height: 320px;
+  }
 }
 /* Force icon color in Avatar/profile button to use huisstijl primary (alleen lijnkleur, niet fill) */
 .profileAvatar svg {
