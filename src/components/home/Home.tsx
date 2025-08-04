@@ -7,7 +7,7 @@ import onTrackLogoLight from '../../assets/on-track/on-track-logo.svg';
 import onTrackLogoDark from '../../assets/on-track/on-track-logo_semi-wit.svg';
 import classes from './Home.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRole } from '../../contexts/RoleContext';
 
 

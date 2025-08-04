@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack, Box } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
