@@ -8,6 +8,8 @@ import onTrackBeeldmerkLight from '../../assets/on-track/on-track-beeldmerk.svg'
 import onTrackBeeldmerkDark from '../../assets/on-track/on-track-beeldmerk_wit.svg';
 import classes from './Header.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useRole } from '../../contexts/RoleContext';
+import { Menu, Avatar, Text } from '@mantine/core';
 
 const linksNl = [
     { link: '#top', label: 'Home' },
@@ -32,6 +34,8 @@ export function Header() {
     const { lang, setLang } = useLanguage();
 
     const links = lang === 'nl' ? linksNl : linksEn;
+    const { role, setRole, roles } = useRole();
+    const [roleMenuOpened, setRoleMenuOpened] = useState(false);
 
     const items = links.map((link) => (
         <a
@@ -120,6 +124,57 @@ export function Header() {
                                 ? <IconSun size={18} color="var(--my-primary)" />
                                 : <IconMoon size={18} color="var(--my-primary)" />}
                         </ActionIcon>
+                        {/* Profile/role button */}
+                        <Menu opened={roleMenuOpened} onChange={setRoleMenuOpened} position="bottom-end" withinPortal>
+                          <Menu.Target>
+                            <ActionIcon
+                              variant="transparent"
+                              size="lg"
+                              onClick={() => setRoleMenuOpened((o) => !o)}
+                              title="Selecteer profiel"
+                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}
+                            >
+                              <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
+                                {role?.icon && (
+                                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18 }}>
+                                    {role.icon && typeof role.icon.type === 'function'
+                                      ? <role.icon.type size={16} color="var(--my-primary)" />
+                                      : role.icon}
+                                  </span>
+                                )}
+                              </Avatar>
+                            </ActionIcon>
+                          </Menu.Target>
+                          <Menu.Dropdown className={classes.profileDropdown} style={{ maxHeight: 320, overflowY: 'auto' }}>
+                            <Menu.Label>Kies je profiel</Menu.Label>
+                            {roles.map(r => (
+                              <Menu.Item
+                                key={r.key}
+                                leftSection={r.icon}
+                                onClick={() => { setRole(r); setRoleMenuOpened(false); }}
+                                className={[
+                                  classes.profileItem,
+                                  role?.key === r.key ? classes.selectedProfileItem : null
+                                ].filter(Boolean).join(' ')}
+                                style={{
+                                  '--_menu-item-hover-bg': 'var(--my-hover)'
+                                }}
+                                onMouseEnter={e => {
+                                  e.currentTarget.style.backgroundColor = 'var(--my-hover)';
+                                }}
+                                onMouseLeave={e => {
+                                  e.currentTarget.style.backgroundColor = '';
+                                }}
+                              >
+                                <Text size="sm" c={role?.key === r.key ? undefined : undefined}>{r.menuTitle[lang]}</Text>
+                              </Menu.Item>
+                            ))}
+                            <Menu.Divider />
+                            <Menu.Item onClick={() => { setRole(null); setRoleMenuOpened(false); }}>
+                              <Text size="xs" c="dimmed">Geen profiel</Text>
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
                     </Group>
                 </div>
                 <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
@@ -174,6 +229,47 @@ export function Header() {
                                 ? <IconSun size={18} color="var(--my-primary)" />
                                 : <IconMoon size={18} color="var(--my-primary)" />}
                         </ActionIcon>
+                        {/* Profile/role button in burger menu */}
+                        <Menu position="bottom-end" withinPortal>
+                          <Menu.Target>
+                            <ActionIcon
+                              variant="transparent"
+                              size="lg"
+                              title="Selecteer profiel"
+                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}   
+                            >
+                              <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
+                                {role?.icon && (
+                                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18 }}>
+                                    {role.icon && typeof role.icon.type === 'function'
+                                      ? <role.icon.type size={16} color="var(--my-primary)" />
+                                      : role.icon}
+                                  </span>
+                                )}
+                              </Avatar>
+                            </ActionIcon>
+                          </Menu.Target>
+                          <Menu.Dropdown className={classes.profileDropdown} style={{ maxHeight: 320, overflowY: 'auto' }}>
+                            <Menu.Label>Kies je profiel</Menu.Label>
+                            {roles.map(r => (
+                              <Menu.Item
+                                key={r.key}
+                                leftSection={r.icon}
+                                onClick={() => { setRole(r); }}
+                                className={[
+                                  classes.profileItem,
+                                  role?.key === r.key ? classes.selectedProfileItem : null
+                                ].filter(Boolean).join(' ')}
+                              >
+                                <Text size="sm" c={role?.key === r.key ? undefined : undefined}>{r.menuTitle[lang]}</Text>
+                              </Menu.Item>
+                            ))}
+                            <Menu.Divider />
+                            <Menu.Item onClick={() => { setRole(null); }}>
+                              <Text size="xs" c="dimmed">Geen profiel</Text>
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
                     </Group>
                 </nav>
             </Drawer>
