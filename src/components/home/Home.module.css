@@ -1,3 +1,18 @@
+/* Icon size for role selection popup */
+.roleIcon {
+  width: 90px !important;
+  height: 90px !important;
+  font-size: 90px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--my-icons) !important;
+}
+.roleIcon svg {
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 90px !important;
+}
 .wrapper {
   position: center;
   box-sizing: border-box;

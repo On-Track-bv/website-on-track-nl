@@ -1,3 +1,17 @@
+/* Icon size for profile menu */
+.profileIcon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profileIcon svg {
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 24px !important;
+}
 /* Algemene styling voor alle profiel-items in de dropdown */
 .profileItem {
   background: transparent;

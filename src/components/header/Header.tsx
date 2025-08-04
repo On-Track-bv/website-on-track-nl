@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack, Box } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
@@ -150,7 +151,7 @@ export function Header() {
                             {roles.map(r => (
                               <Menu.Item
                                 key={r.key}
-                                leftSection={r.icon}
+                                leftSection={<span className={classes.profileIcon}>{r.icon}</span>}
                                 onClick={() => { setRole(r); setRoleMenuOpened(false); }}
                                 className={[
                                   classes.profileItem,
