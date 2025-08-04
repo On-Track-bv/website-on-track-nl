@@ -68,21 +68,37 @@
   margin-bottom: calc(var(--mantine-spacing-xs) / 2);
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
 }
-
 .afterFooter {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%; /* voeg deze toe */
   margin-top: var(--mantine-spacing-xl);
   padding-top: var(--mantine-spacing-xl);
   padding-bottom: var(--mantine-spacing-xl);
   border-top: 1px solid var(--my-subtext) !important;
-
-  @media (max-width: 48em) {
-    flex-direction: column;
-  }
 }
 
+.afterFooter .mantine-Group-root {
+  align-self: flex-end;
+  width: auto; /* voeg deze toe */
+  margin-top: var(--mantine-spacing-xs);
+}
+@media (max-width: 48em) {
+  .afterFooter .mantine-Group-root {
+    align-self: center;
+  }
+}
+.footerButtons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+@media (max-width: 48em) {
+  .footerButtons {
+    justify-content: center;
+  }
+}
 .social {
   @media (max-width: 48em) {
     margin-top: var(--mantine-spacing-xs);
