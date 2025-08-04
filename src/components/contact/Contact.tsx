@@ -98,6 +98,7 @@ export function Contact() {
                 phone: sanitize(values.phone),
                 subject: sanitize(values.subject),
                 message: sanitize(values.message),
+                time: new Date().toISOString(), // <-- timestamp toegevoegd
             };
 
             const templateParams = {
@@ -118,7 +119,7 @@ export function Contact() {
             console.error('EmailJS error:', error);
         }
         setLoading(false);
-    };
+    };  
 
     return (
         <form onSubmit={form.onSubmit(handleSubmit)} className={classes.form}>
@@ -165,7 +166,8 @@ export function Contact() {
                     buttonClass={classes.phoneButton}
                     dropdownClass={classes.phoneDropdown}
                     specialLabel={t.phone}
-                />    </div>
+                />    
+                </div>
             </SimpleGrid>
             <TextInput
                 label={t.subject}

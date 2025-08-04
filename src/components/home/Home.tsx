@@ -387,7 +387,7 @@ export function Home() {
                 case 'overheid':
                   return lang === 'en'
                     ? <>From <span className={classes.gradientText}>requirement</span> to delivery</>
-                    : <>Van <span className={classes.gradientText}>informatiebehoefte</span> naar levering</>;
+                    : <>Van <span className={classes.gradientText}>informatie behoefte</span> naar levering</>;
                 case 'developer':
                   return lang === 'en'
                     ? <>Connect <span className={classes.gradientText}>LinkedData</span> and <span className={classes.gradientText}>BIM</span></>

@@ -34,9 +34,13 @@ export function Footer() {
         ? "© 2025 On-Track B.V. Alle rechten voorbehouden."
         : "© 2025 On-Track B.V. All rights reserved.";
 
-const disclaimerNl = `De content op deze website is door On-Track B.V. met de grootst mogelijke zorg samengesteld, doch aanvaarden we geen aansprakelijkheid ten aanzien van mogelijke onjuistheden van de inhoud. On-Track B.V. is niet verantwoordelijk voor content op de aan deze website gekoppelde bestanden en/of websites waarnaar wordt verwezen. Ongeautoriseerd of oneigenlijk gebruik van de content of delen daarvan, maken inbreuk op intellectuele rechten. Toestemming tot het gebruik van de getoonde content of delen daarvan op publiekelijk toegankelijke plaatsen dient mag alleen na schriftelijke toestemming vanuit On-Track B.V.. Voor vragen kun je met ons telefonisch of via mail contact opnemen.`;
+    const cookies = lang === 'nl'
+        ? "Deze website gebruikt alleen functionele cookies en geen tracking of marketing cookies."
+        : "This website only uses functional cookies and no tracking or marketing cookies.";
 
-const disclaimerEn = `The content on this website has been compiled with the greatest possible care by On-Track B.V., but we accept no liability for any inaccuracies in the content. On-Track B.V. is not responsible for the content of files and/or websites linked to this website. Unauthorized or improper use of the content or parts thereof infringes intellectual property rights. Permission to use the displayed content or parts thereof in publicly accessible places may only be granted with written consent from On-Track B.V. For questions, you can contact us by phone or email.`;
+const disclaimerNl = `De content op deze website is door On-Track B.V. met de grootst mogelijke zorg samengesteld, doch aanvaarden we geen aansprakelijkheid ten aanzien van mogelijke onjuistheden van de inhoud. On-Track B.V. is niet verantwoordelijk voor content op de aan deze website gekoppelde bestanden en/of websites waarnaar wordt verwezen. Ongeautoriseerd of oneigenlijk gebruik van de content of delen daarvan, maken inbreuk op intellectuele rechten. Toestemming tot het gebruik van de getoonde content of delen daarvan op publiekelijk toegankelijke plaatsen dient mag alleen na schriftelijke toestemming vanuit On-Track B.V.. Voor vragen kun je met ons telefonisch of via mail contact opnemen. Deze website gebruikt alleen functionele cookies en geen tracking of marketing cookies.`;
+
+const disclaimerEn = `The content on this website has been compiled with the greatest possible care by On-Track B.V., but we accept no liability for any inaccuracies in the content. On-Track B.V. is not responsible for the content of files and/or websites linked to this website. Unauthorized or improper use of the content or parts thereof infringes intellectual property rights. Permission to use the displayed content or parts thereof in publicly accessible places may only be granted with written consent from On-Track B.V. For questions, you can contact us by phone or email. This website only uses functional cookies and no tracking or marketing cookies.`;
 
     return (
         <footer className={classes.footer}>
@@ -65,6 +69,10 @@ const disclaimerEn = `The content on this website has been compiled with the gre
                 <Text size="sm" c='var(--my-subtext)'>
                     {copyright}
                 </Text>
+                <Text size="xs" c='var(--my-subtext)' mt={4}>
+                    {cookies}
+                </Text>
+  <div className={classes.footerButtons}>
                 <Group mt="xs" justify="center">
                     <button
                         className={classes.languageButton}
@@ -92,8 +100,9 @@ const disclaimerEn = `The content on this website has been compiled with the gre
                     >
                         Disclaimer
                     </Button>
-                </Group>
+                </Group></div>
             </Container>
+                        
             <Modal
                 opened={disclaimerOpened}
                 onClose={() => setDisclaimerOpened(false)}
