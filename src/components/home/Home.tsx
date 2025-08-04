@@ -8,7 +8,7 @@ import onTrackLogoDark from '../../assets/on-track/on-track-logo_semi-wit.svg';
 import classes from './Home.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useState, useEffect } from 'react';
-import { roles } from '../../contexts/RoleContext';
+import { useRole } from '../../contexts/RoleContext';
 
 
 
@@ -33,27 +33,28 @@ const texts = {
 export function Home() {
   const { lang, setLang } = useLanguage();
   const t = texts[lang];
-  const [role, setRole] = useState<string | null>(null);
+  const { role, setRole, roles } = useRole();
   const [showModal, setShowModal] = useState(true);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   // On first visit, show modal. If you want to remember the choice, use localStorage here.
-  useEffect(() => {
-    // Uncomment below to only show once per session:
-    // const savedRole = window.sessionStorage.getItem('ontrack_role');
-    // if (savedRole) {
-    //   setRole(savedRole);
-    //   setShowModal(false);
-    // }
-  }, []);
+  // useEffect(() => {
+  //   const savedRole = window.sessionStorage.getItem('ontrack_role');
+  //   if (savedRole) {
+  //     const found = roles.find(r => r.key === savedRole);
+  //     if (found) setRole(found);
+  //     setShowModal(false);
+  //   }
+  // }, [roles, setRole]);
 
   const handleRoleSelect = (key: string) => {
-    setRole(key);
+    const found = roles.find(r => r.key === key);
+    if (found) setRole(found);
     setShowModal(false);
     // window.sessionStorage.setItem('ontrack_role', key); // Uncomment to remember
   };
 
-  const selectedRole = roles.find(r => r.key === role);
+  const selectedRole = role;
 
   return (
     <div className={classes.wrapper}>
@@ -118,7 +119,7 @@ export function Home() {
               }}
             >
               {roles.map(r => {
-                const isSelected = role === r.key;
+                const isSelected = role?.key === r.key;
                 const [hovered, setHovered] = useState(false);
                 return (
                   <button
