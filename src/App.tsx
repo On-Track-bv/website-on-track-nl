@@ -20,9 +20,9 @@ function App() {
       <AppShell.Header>
         <Header />
       </AppShell.Header>
-      <AppShell.Main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Container size="xl" style={{ textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Box id="top" my="xl">
+ <AppShell.Main>
+        <Container size="xl" style={{ textAlign: 'center' }}>
+          <Box id="top"  my="xl">
             <Home />
           </Box>
           <Box id="why" my="xl">
