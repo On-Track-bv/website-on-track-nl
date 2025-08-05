@@ -1,7 +1,7 @@
 .bgLogoOutline {
   position: fixed;
   top: 1;
-  right: 0;
+  right: 0.5vw;
   height: 100vh;
   min-width: 700px;
   width: 55vw;
