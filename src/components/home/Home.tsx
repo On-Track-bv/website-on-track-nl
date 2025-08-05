@@ -8,7 +8,7 @@ import onTrackLogoLight from '../../assets/on-track/on-track-logo.svg';
 import onTrackLogoDark from '../../assets/on-track/on-track-logo_semi-wit.svg';
 import classes from './Home.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRole } from '../../contexts/RoleContext';
 import onTrackLogoOutlineLight from '../../assets/on-track/on-track-outline_logo.svg';
 import onTrackLogoOutlineDark from '../../assets/on-track/on-track-outline_logo_wit.svg';
