@@ -9,6 +9,8 @@ import classes from './Home.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useState } from 'react';
 import { useRole } from '../../contexts/RoleContext';
+import onTrackLogoOutlineLight from '../../assets/on-track/on-track-outline_logo.svg';
+import onTrackLogoOutlineDark from '../../assets/on-track/on-track-outline_logo_wit.svg';
 
 
 
@@ -58,6 +60,14 @@ export function Home() {
 
   return (
     <div className={classes.wrapper}>
+      {/* Decorative background logo outline */}
+      <img
+        src={colorScheme === 'dark' ? onTrackLogoOutlineDark : onTrackLogoOutlineLight}
+        alt="On-Track outline logo"
+        className={classes.bgLogoOutline}
+        aria-hidden="true"
+        draggable="false"
+      />
         <Modal
           opened={showModal}
           onClose={() => setShowModal(false)}

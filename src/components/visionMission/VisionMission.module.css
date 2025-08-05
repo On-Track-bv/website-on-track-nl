@@ -1,7 +1,7 @@
 .wrapper {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  background: var(--my-bg);
+  background: none;
   overflow-x: hidden;
 }
 .section {
