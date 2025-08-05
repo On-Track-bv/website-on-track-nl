@@ -1,7 +1,4 @@
-.wrapper {
-  padding-top: calc(var(--mantine-spacing-xl) * 4) !important;
-  padding-bottom: calc(var(--mantine-spacing-xl) * 4) !important;
-}
+
 
 .title {
   font-family: Outfit, var(--mantine-font-family) !important;
