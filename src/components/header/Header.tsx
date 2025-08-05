@@ -133,6 +133,7 @@ export function Header() {
                               onClick={() => setRoleMenuOpened((o) => !o)}
                               title="Selecteer profiel"
                               style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}
+                              data-profile-btn
                             >
                               <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
                                 {role?.icon && (
@@ -236,7 +237,8 @@ export function Header() {
                               variant="transparent"
                               size="lg"
                               title="Selecteer profiel"
-                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}   
+                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}
+                              data-profile-btn
                             >
                               <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
                                 {role?.icon && (
