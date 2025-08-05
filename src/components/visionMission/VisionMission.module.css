@@ -1,8 +1,7 @@
 .wrapper {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   background: none;
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 .section {
   position: relative;

@@ -1,7 +1,8 @@
-import { createTheme } from '@mantine/core';
+import { createTheme, MantineProvider } from '@mantine/core';
 
 export const theme = createTheme({
     fontFamily: 'Nunito, Arial, sans-serif',
+  
     // colors: {
     //     primary: virtualColor({
     //         name: 'primary',
