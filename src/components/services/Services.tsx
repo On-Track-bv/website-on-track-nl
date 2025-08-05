@@ -16,7 +16,7 @@ import classes from './Services.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 
-const servicesContent = {
+export const servicesContent = {
   basic: {
     nl: {
       consultancyTitle: 'Consultancy',
@@ -186,6 +186,8 @@ function getRoleGroup(roleKey: string | undefined): 'basic' | 'bim' | 'data' {
   return 'basic';
 }
 
+import { Box } from '@mantine/core';
+
 export function Services() {
   const { lang } = useLanguage();
   const { role } = useRole();
@@ -194,35 +196,44 @@ export function Services() {
 
   return (
     <Container className={classes.wrapper}>
+      {/* Proces Section */}
+      <Box id="process" mb={80}>
+        <Title className={classes.title}>Proces</Title>
+        <Text className={classes.description}>Hier komt de procesbeschrijving of features.</Text>
+        {/* Voeg hier eventueel een eigen SimpleGrid toe voor proces-features */}
+      </Box>
+
       {/* Consultancy Section */}
-      <Title className={classes.title}>{t.consultancyTitle}</Title>
-      <Text className={classes.description}>{t.consultancyDescription}</Text>
-      <SimpleGrid
-        mt={40}
-        cols={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: 'xl', md: 50 }}
-        verticalSpacing={{ base: 'xl', md: 50 }}
-      >
-        {t.consultancy.map((feature, idx) => (
-          <Feature key={idx} {...feature} />
-        ))}
-      </SimpleGrid>
+      <Box id="consultancy" mb={80}>
+        <Title className={classes.title}>{t.consultancyTitle}</Title>
+        <Text className={classes.description}>{t.consultancyDescription}</Text>
+        <SimpleGrid
+          mt={40}
+          cols={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: 'xl', md: 50 }}
+          verticalSpacing={{ base: 'xl', md: 50 }}
+        >
+          {t.consultancy.map((feature, idx) => (
+            <Feature key={idx} {...feature} />
+          ))}
+        </SimpleGrid>
+      </Box>
 
       {/* Software Section */}
-      <Title className={classes.title} mt={80}>
-        {t.softwareTitle}
-      </Title>
-      <Text className={classes.description}>{t.softwareDescription}</Text>
-      <SimpleGrid
-        mt={40}
-        cols={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: 'xl', md: 50 }}
-        verticalSpacing={{ base: 'xl', md: 50 }}
-      >
-        {t.software.map((feature, idx) => (
-          <Feature key={idx} {...feature} />
-        ))}
-      </SimpleGrid>
+      <Box id="software">
+        <Title className={classes.title}>{t.softwareTitle}</Title>
+        <Text className={classes.description}>{t.softwareDescription}</Text>
+        <SimpleGrid
+          mt={40}
+          cols={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: 'xl', md: 50 }}
+          verticalSpacing={{ base: 'xl', md: 50 }}
+        >
+          {t.software.map((feature, idx) => (
+            <Feature key={idx} {...feature} />
+          ))}
+        </SimpleGrid>
+      </Box>
     </Container>
   );
 }
