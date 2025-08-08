@@ -22,7 +22,13 @@ pnpm-debug.log*
 *.sublime-project
 
 # Env files
-.env*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# But keep .env.example for documentation
+!.env.example
 
 # TypeScript
 *.tsbuildinfo
