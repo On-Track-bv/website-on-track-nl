@@ -1,0 +1,44 @@
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "On-Track BV",
+  "description": "Building professional connections and networks",
+  "url": "https://on-track.nl",
+  "logo": "https://on-track.nl/assets/on-track.png",
+  "image": "https://on-track.nl/assets/on-track.png",
+  "@id": "https://on-track.nl/#organization",
+  "founder": {
+    "@type": "Person",
+    "name": "On-Track Team"
+  },
+  "foundingDate": "2025",
+  "knowsAbout": [
+    "Software Connections",
+    "LinkedData",
+    "BIM",
+    "Development",
+    "Data connections",
+    "Business Connections"
+  ],
+  "serviceArea": {
+    "@type": "Country",
+    "name": "Netherlands"
+  },
+  "areaServed": {
+    "@type": "Country", 
+    "name": "Netherlands"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": ["Dutch", "English"],
+    "url": "https://on-track.nl/#contact-us"
+  },
+  "sameAs": [
+  ],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://on-track.nl/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}

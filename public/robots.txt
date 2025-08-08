@@ -40,5 +40,5 @@ Allow: /
 # Crawl-delay voor alle bots (respectvolle crawling)
 Crawl-delay: 1
 
-# Verwijs naar je sitemap (optioneel)
-# Sitemap: https://on-track.nl/sitemap.xml
+# Verwijs naar je sitemap voor betere indexering
+Sitemap: https://on-track.nl/sitemap.xml
