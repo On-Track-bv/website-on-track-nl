@@ -10,21 +10,35 @@
   /* Make it full width of the viewport */
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  
-  /* Animated gradient background - Light mode */
-  background: linear-gradient(-45deg, 
-    #589ea6, 
-    #a4d7db, 
-    #f7ce91, 
-    #f28f38,
-    #589ea6,
-    #a4d7db
-  );
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  
-  /* Add subtle overlay for depth */
+}
+.cardContainer {
+  position: absolute;
+  top: clamp(1vh, 10%, 10vh); /* Minimum 1vh, voorkeur 10%, maximum 10vh */
+  left: 10%; /* Geen left offset - gebruik volledige beschikbare breedte */
+  transform: translateY(-50%); /* Alleen verticaal centreren */
+  width: 100%; /* Gebruik alle beschikbare ruimte */
+  max-width: none; /* Geen viewport-based limiet */
+  height: min(450px, 60vh); /* Responsive hoogte */
+  /* Remove old transitions - framer-motion handles this now */
+}
+
+.processCard {
+  /* Base glassmorphism effect */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  height: 100%; /* Vul de hele container */
+  min-height: min(400px, 55vh); /* Responsive minimum hoogte */
+  max-height: min(500px, 65vh); /* Responsive maximum hoogte */
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  /* Remove all transitions - framer-motion handles this */
+  transition: none !important;
 }
 
 /* Dark mode gradient background */
@@ -342,7 +356,9 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  width: 60vh;
+  width: 100%; /* Gebruik beschikbare grid ruimte */
+  min-width: 600px; /* Minimum breedte voor kaarten */
+  max-height: calc(100vh - 280px); /* Zorg dat kaarten niet te hoog worden */
   overflow: visible;
   perspective: 1000px;
   padding-left: 0;
@@ -351,11 +367,12 @@
 
 .cardContainer {
   position: absolute;
-  top: 20%;
-  left: 5%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 600px;
+  top: 10%; /* Standaard 10% voor normale schermen */
+  left: 10%; /* Geen left offset - gebruik volledige beschikbare breedte */
+  transform: translateY(-50%); /* Alleen verticaal centreren */
+  width: 100%; /* Gebruik alle beschikbare ruimte */
+  max-width: none; /* Geen viewport-based limiet */
+  height: min(450px, 60vh); /* Responsive hoogte */
   /* Remove old transitions - framer-motion handles this now */
 }
 
@@ -366,11 +383,14 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  min-height: 450px;
-  max-height: 550px;
+  height: 100%; /* Vul de hele container */
+  min-height: min(400px, 55vh); /* Responsive minimum hoogte */
+  max-height: min(500px, 65vh); /* Responsive maximum hoogte */
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
   /* Remove all transitions - framer-motion handles this */
   transition: none !important;
 }
@@ -524,6 +544,12 @@
 }
 
 /* Responsive Design */
+@media (max-height: 700px) {
+  .cardContainer {
+    top: 1vh; /* Bij kleine schermen gebruik 1vh */
+  }
+}
+
 @media (max-width: 1200px) {
   .processContent {
     grid-template-columns: 250px 1fr;
@@ -589,6 +615,13 @@
 @media (max-width: 768px) {
   .processSection {
     padding: 2rem 0;
+    height: auto; /* Sta toe dat sectie groeit op mobile */
+    min-height: calc(100vh - 80px); /* Maar minimaal viewport hoogte */
+  }
+
+  .processContainer {
+    height: auto;
+    min-height: calc(100vh - 80px - 4rem); /* Minus padding */
   }
 
   .processHeader {
@@ -601,6 +634,21 @@
 
   .processSubtitle {
     font-size: 1rem;
+  }
+
+  .processCards {
+    max-height: none; /* Geen maximum hoogte op mobile */
+  }
+
+  .cardContainer {
+    height: auto; /* Auto hoogte op mobile */
+    min-height: 350px; /* Minimum hoogte */
+    max-height: none; /* Geen maximum */
+  }
+
+  .processCard {
+    min-height: 350px; /* Kleinere minimum op mobile */
+    max-height: none; /* Geen maximum op mobile */
   }
 
   .navItem {

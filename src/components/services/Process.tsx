@@ -81,6 +81,8 @@ export function Process() {
   const exitCooldownRef = useRef(false);
   const lastScrollYRef = useRef(0);
   const programmaticScrollRef = useRef(false);
+  const lastWheelTimeRef = useRef(0);
+  const touchpadDebounceRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Initialize scroll position
@@ -91,12 +93,45 @@ export function Process() {
 
       e.preventDefault();
       
-      // Accumulate scroll to prevent too fast stepping
-      const delta = e.deltaY > 0 ? 1 : -1;
-      scrollCounterRef.current += delta;
+      const now = Date.now();
+      lastWheelTimeRef.current = now;
       
-      // Lower threshold for easier exit
-      const scrollThreshold = 2;
+      // Better touchpad detection - touchpads usually have fractional deltaY values
+      const isTouchpad = e.deltaY % 1 !== 0 || Math.abs(e.deltaY) < 40;
+      
+      // For touchpad, add debouncing to prevent rapid consecutive events
+      if (isTouchpad) {
+        if (touchpadDebounceRef.current) {
+          clearTimeout(touchpadDebounceRef.current);
+        }
+        
+        touchpadDebounceRef.current = window.setTimeout(() => {
+          processWheelEvent(e, true);
+        }, 100); // Longer debounce for touchpad
+        return;
+      }
+      
+      // For mousewheel, process immediately
+      processWheelEvent(e, false);
+    };
+    
+    const processWheelEvent = (e: WheelEvent, isTouchpad: boolean) => {
+      // Different handling for touchpad vs mousewheel
+      let delta: number;
+      let scrollThreshold: number;
+      
+      if (isTouchpad) {
+        // For touchpad: use much smaller increments and much higher threshold
+        delta = e.deltaY > 0 ? 0.1 : -0.1; // Veel kleinere stappen
+        scrollThreshold = 15; // Veel hogere threshold
+      } else {
+        // For mousewheel: use larger increments and lower threshold
+        delta = e.deltaY > 0 ? 1 : -1;
+        scrollThreshold = 2; // Lower threshold for mousewheel
+      }
+      
+      // Accumulate scroll to prevent too fast stepping
+      scrollCounterRef.current += delta;
       
       if (scrollCounterRef.current >= scrollThreshold) {
         // Scroll down - next step
@@ -199,6 +234,11 @@ export function Process() {
     return () => {
       document.removeEventListener('wheel', handleWheel);
       window.removeEventListener('scroll', handleScroll);
+      
+      // Cleanup touchpad debounce timeout
+      if (touchpadDebounceRef.current) {
+        clearTimeout(touchpadDebounceRef.current);
+      }
     };
   }, [activeStep, isInScrollZone]);
 
@@ -326,8 +366,9 @@ export function Process() {
                     }}
                     style={{
                       borderRadius: '20px',
-                      minHeight: '450px',
-                      maxHeight: '550px',
+                      height: '100%', // Vul de hele container
+                      minHeight: 'min(400px, 55vh)', // Responsive minimum hoogte
+                      maxHeight: 'min(500px, 65vh)', // Responsive maximum hoogte
                       position: 'relative',
                       overflow: 'hidden',
                       border: isActive 
