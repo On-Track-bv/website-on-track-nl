@@ -122,6 +122,105 @@ const texts = {
 };
 
 
+// Role Button Component to avoid hook issues
+function RoleButton({ 
+  role, 
+  isSelected, 
+  onClick, 
+  lang 
+}: { 
+  role: {
+    key: string;
+    label: { [key: string]: string };
+    icon: React.ReactElement;
+  }; 
+  isSelected: boolean; 
+  onClick: () => void; 
+  lang: string;
+}) {
+  const [hovered, setHovered] = useState(false);
+  
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative',
+        background: isSelected ? 'var(--my-gradient)' : 'var(--my-bgheader)',
+        color: isSelected ? 'var(--my-primary-dark)' : 'var(--my-primary)',
+        borderRadius: 18,
+        fontWeight: 600,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        aspectRatio: '1/1',
+        minWidth: 120,
+        minHeight: 120,
+        maxWidth: 180,
+        maxHeight: 180,
+        padding: '0',
+        fontSize: '0.95rem',
+        boxShadow: isSelected
+          ? '0 4px 24px 0 rgba(0,0,0,0.18)'
+          : '0 1px 6px 0 rgba(0,0,0,0.08)',
+        border: isSelected
+          ? '2.5px solid var(--my-primary)'
+          : '1.5px solid var(--my-bgheader)',
+        cursor: 'pointer',
+        transition: 'box-shadow 0.18s, transform 0.13s, border 0.18s',
+        overflow: 'hidden',
+      }}
+      onMouseOver={e => {
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 32px 0 rgba(0,0,0,0.22)';
+        (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.045)';
+      }}
+      onMouseOut={e => {
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = isSelected
+          ? '0 4px 24px 0 rgba(0,0,0,0.18)'
+          : '0 1px 6px 0 rgba(0,0,0,0.08)';
+        (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+      }}
+    >
+      <span
+        className={classes.roleIcon}
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          opacity: hovered ? 1 : 0.4,
+          zIndex: 1,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          transition: 'opacity 0.18s',
+        }}
+      >
+        {role.icon}
+      </span>
+      {hovered ? null : (
+        <span
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            fontSize: '0.9em',
+            textAlign: 'center',
+            lineHeight: 1.25,
+            padding: '0 10px',
+            fontWeight: 700,
+            color: 'inherit',
+            textShadow: '0 1px 8px rgba(0,0,0,0.08)',
+          }}
+        >
+          {role.label[lang as keyof typeof role.label]}
+        </span>
+      )}
+    </button>
+  );
+}
+
 export function Home() {
   const { lang, setLang } = useLanguage();
   const t = texts[lang];
@@ -241,86 +340,14 @@ export function Home() {
             >
               {roles.map(r => {
                 const isSelected = role?.key === r.key;
-                const [hovered, setHovered] = useState(false);
                 return (
-                  <button
+                  <RoleButton
                     key={r.key}
+                    role={r}
+                    isSelected={isSelected}
                     onClick={() => handleRoleSelect(r.key)}
-                    onMouseEnter={() => setHovered(true)}
-                    onMouseLeave={() => setHovered(false)}
-                    style={{
-                      position: 'relative',
-                      background: isSelected ? 'var(--my-gradient)' : 'var(--my-bgheader)',
-                      color: isSelected ? 'var(--my-primary-dark)' : 'var(--my-primary)',
-                      borderRadius: 18,
-                      fontWeight: 600,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      aspectRatio: '1/1',
-                      minWidth: 120,
-                      minHeight: 120,
-                      maxWidth: 180,
-                      maxHeight: 180,
-                      padding: '0',
-                      fontSize: '0.95rem',
-                      boxShadow: isSelected
-                        ? '0 4px 24px 0 rgba(0,0,0,0.18)'
-                        : '0 1px 6px 0 rgba(0,0,0,0.08)',
-                      border: isSelected
-                        ? '2.5px solid var(--my-primary)'
-                        : '1.5px solid var(--my-bgheader)',
-                      cursor: 'pointer',
-                      transition: 'box-shadow 0.18s, transform 0.13s, border 0.18s',
-                      overflow: 'hidden',
-                    }}
-                    onMouseOver={e => {
-                      (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 32px 0 rgba(0,0,0,0.22)';
-                      (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.045)';
-                    }}
-                    onMouseOut={e => {
-                      (e.currentTarget as HTMLButtonElement).style.boxShadow = isSelected
-                        ? '0 4px 24px 0 rgba(0,0,0,0.18)'
-                        : '0 1px 6px 0 rgba(0,0,0,0.08)';
-                      (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-                    }}
-                  >
-                    <span
-                      className={classes.roleIcon}
-                      style={{
-                        position: 'absolute',
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        opacity: hovered ? 1 : 0.4,
-                        zIndex: 1,
-                        pointerEvents: 'none',
-                        userSelect: 'none',
-                        transition: 'opacity 0.18s',
-                      }}
-                    >
-                      {r.icon}
-                    </span>
-                    {hovered ? null : (
-                      <span
-                        style={{
-                          position: 'relative',
-                          zIndex: 2,
-                          fontSize: '0.9em',
-                          textAlign: 'center',
-                          lineHeight: 1.25,
-                          padding: '0 10px',
-                          fontWeight: 700,
-                          color: 'inherit',
-                          textShadow: '0 1px 8px rgba(0,0,0,0.08)',
-                        }}
-                      >
-                        {r.label[lang]}
-                      </span>
-                    )}
-                  </button>
+                    lang={lang}
+                  />
                 );
               })}
             </div>

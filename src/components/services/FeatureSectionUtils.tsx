@@ -4,7 +4,7 @@ import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import classes from './Services.module.css';
 
 export interface FeatureProps {
-  icon?: React.FC<any>;
+  icon?: React.ComponentType<{ size?: number; stroke?: number }>;
   title: React.ReactNode;
   description: React.ReactNode;
 }
@@ -68,24 +68,4 @@ export function Feature({ icon: Icon, title, description }: FeatureProps) {
       </Text>
     </div>
   );
-}
-
-export function getRoleGroup(roleKey: string | undefined): 'basic' | 'bim' | 'data' {
-  if (!roleKey) return 'basic';
-  if ([
-    'kringverjaardag',
-    'directie',
-    'opdrachtgever',
-  ].includes(roleKey)) return 'basic';
-  if ([
-    'bouwinfra',
-    'bimconsultant',
-    'bimmanager',
-    'overheid',
-  ].includes(roleKey)) return 'bim';
-  if ([
-    'linkeddata',
-    'developer',
-  ].includes(roleKey)) return 'data';
-  return 'basic';
 }
