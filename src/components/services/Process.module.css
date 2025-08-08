@@ -1,18 +1,167 @@
-/* Process Section - Full Screen Height */
+/* Process Section - Full Screen Height with Animated Background */
 .processSection {
-  background: linear-gradient(135deg, var(--mantine-color-gray-0) 0%, var(--mantine-color-blue-0) 100%);
   height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   position: relative;
   margin-top: 12rem;
   margin-bottom: 12rem;
+  overflow: hidden;
+  /* Make it full width of the viewport */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  
+  /* Animated gradient background - Light mode */
+  background: linear-gradient(-45deg, 
+    #589ea6, 
+    #a4d7db, 
+    #f7ce91, 
+    #f28f38,
+    #589ea6,
+    #a4d7db
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  
+  /* Add subtle overlay for depth */
+  position: relative;
 }
 
+/* Dark mode gradient background */
 [data-mantine-color-scheme='dark'] .processSection {
-  background: linear-gradient(135deg, var(--mantine-color-dark-8) 0%, var(--mantine-color-dark-7) 100%);
+  background: linear-gradient(-45deg, 
+    #0c2659, 
+    #264175, 
+    #4163a3, 
+    #589ea6,
+    #0c2659,
+    #264175
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }
 
+.processSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* Create a stronger, inverted gradient for cut-out effect */
+  background: linear-gradient(-45deg, 
+    rgba(88, 158, 166, 0.8), 
+    rgba(164, 215, 219, 0.7), 
+    rgba(247, 206, 145, 0.7), 
+    rgba(242, 143, 56, 0.8),
+    rgba(88, 158, 166, 0.8),
+    rgba(164, 215, 219, 0.7)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  
+  /* Apply the logo mask to cut out the logo shape */
+  mask: url(#logoMask);
+  -webkit-mask: url(#logoMask);
+  
+  pointer-events: none;
+}
+
+/* Simple gradient background without cutout */
+.logoMaskedGradientBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* Animated gradient background - Light mode */
+  background: linear-gradient(-45deg, 
+    #589ea6, 
+    #a4d7db, 
+    #f7ce91, 
+    #f28f38,
+    #589ea6,
+    #a4d7db
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Dark mode gradient background for logoMaskedGradientBackground */
+[data-mantine-color-scheme='dark'] .logoMaskedGradientBackground {
+  background: linear-gradient(-45deg, 
+    #0c2659, 
+    #264175, 
+    #4163a3, 
+    #589ea6,
+    #0c2659,
+    #264175
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Floating orbs overlay */
+.processSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(88, 158, 166, 0.2) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(242, 143, 56, 0.2) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(247, 206, 145, 0.1) 0%, transparent 50%);
+  animation: floatingOrbs 25s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes overlayShift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes floatingOrbs {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translateY(10px) rotate(240deg);
+    opacity: 0.4;
+  }
+}
+
+/* Content should be above the masked background */
 .processContainer {
   max-width: 1400px !important;
   margin: 0 auto;
@@ -21,6 +170,8 @@
   justify-content: center;
   height: 100%;
   padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 /* Header */
@@ -28,24 +179,29 @@
   text-align: center;
   margin-bottom: 3rem;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .processTitle {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  color: var(--my-primary);
+  color: white;
   margin-bottom: 1rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 .processSubtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--mantine-color-gray-6);
+  color: rgba(255, 255, 255, 0.9) !important;
   max-width: 600px;
-  margin: 0 auto;
-}
-
-[data-mantine-color-scheme='dark'] .processSubtitle {
-  color: var(--mantine-color-gray-4);
+  margin: 0 auto !important;
+  text-align: center !important;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+  font-weight: 400;
+  line-height: 1.5;
+  display: block !important;
 }
 
 /* Main Content Layout */
@@ -76,62 +232,79 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
-  background: var(--mantine-color-white);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 [data-mantine-color-scheme='dark'] .navItem {
-  background: var(--mantine-color-dark-6);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .navItem:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateX(4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 [data-mantine-color-scheme='dark'] .navItem:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .navItemActive {
-  border-color: var(--my-primary);
-  background: var(--my-primary-light);
-  transform: translateX(8px);
-  box-shadow: 0 6px 20px rgba(70, 123, 220, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateX(8px) scale(1.05);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
 }
 
 [data-mantine-color-scheme='dark'] .navItemActive {
-  background: var(--mantine-color-dark-5);
-  box-shadow: 0 6px 20px rgba(70, 123, 220, 0.4);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4);
 }
 
 .navNumber {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--mantine-color-gray-2);
-  color: var(--mantine-color-gray-7);
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.875rem;
   transition: all 0.3s ease;
   flex-shrink: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 [data-mantine-color-scheme='dark'] .navNumber {
-  background: var(--mantine-color-dark-4);
-  color: var(--mantine-color-gray-3);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .navItemActive .navNumber {
-  background: var(--my-primary);
-  color: white;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--my-primary);
+  text-shadow: none;
+}
+
+/* Dark mode - make active number readable with dark blue color */
+[data-mantine-color-scheme='dark'] .navItemActive .navNumber {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0c2659;
+  text-shadow: none;
 }
 
 .navContent {
@@ -141,133 +314,206 @@
 .navTitle {
   font-weight: 600;
   font-size: 0.875rem;
-  color: var(--mantine-color-gray-8);
+  color: white;
   margin-bottom: 0.125rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 [data-mantine-color-scheme='dark'] .navTitle {
-  color: var(--mantine-color-gray-1);
+  color: white;
 }
 
 .navSubtitle {
   font-size: 0.75rem;
-  color: var(--mantine-color-gray-6);
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 [data-mantine-color-scheme='dark'] .navSubtitle {
-  color: var(--mantine-color-gray-4);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Right Cards */
-/* Right Cards - Scroll Scene Animation */
+/* Right Cards - Fancy Rolling Animation */
 .processCards {
   flex: 1;
   position: relative;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 60vh;
+  overflow: visible;
+  perspective: 1000px;
+  padding-left: 0;
+  margin-left: 2rem;
 }
 
 .cardContainer {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 20%;
+  left: 5%;
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 600px;
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0;
-  visibility: hidden;
-}
-
-.cardActive {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
-  z-index: 2;
-}
-
-.cardInactive {
-  opacity: 0;
-  visibility: hidden;
-  transform: translate(-50%, -50%) scale(0.9);
-  z-index: 1;
+  /* Remove old transitions - framer-motion handles this now */
 }
 
 .processCard {
-  background: var(--mantine-color-white);
-  border: 1px solid var(--mantine-color-gray-2);
-  transition: all 0.3s ease;
+  /* Base glassmorphism effect */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
   min-height: 450px;
   max-height: 550px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  /* Remove all transitions - framer-motion handles this */
+  transition: none !important;
+}
+
+/* Also disable transitions on all child elements */
+.processCard * {
+  transition: none !important;
 }
 
 [data-mantine-color-scheme='dark'] .processCard {
-  background: var(--mantine-color-dark-6);
-  border-color: var(--mantine-color-dark-4);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  transition: none !important;
 }
 
-.cardActive .processCard {
-  box-shadow: 0 12px 40px rgba(70, 123, 220, 0.15);
-  border-color: var(--my-primary-light);
+/* Active card - most prominent */
+.processCardActive {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border: 2px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
 }
 
-[data-mantine-color-scheme='dark'] .cardActive .processCard {
-  box-shadow: 0 12px 40px rgba(70, 123, 220, 0.25);
+[data-mantine-color-scheme='dark'] .processCardActive {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Card Content */
+/* Previous card - subtle blue tint */
+.processCardPrev {
+  background: rgba(88, 158, 166, 0.3) !important;
+  border: 1px solid rgba(88, 158, 166, 0.5) !important;
+  box-shadow: 0 12px 40px rgba(88, 158, 166, 0.15) !important;
+}
+
+[data-mantine-color-scheme='dark'] .processCardPrev {
+  background: rgba(12, 38, 89, 0.4) !important;
+  border: 1px solid rgba(12, 38, 89, 0.6) !important;
+  box-shadow: 0 12px 40px rgba(12, 38, 89, 0.2) !important;
+}
+
+/* Next card - subtle orange tint */
+.processCardNext {
+  background: rgba(242, 143, 56, 0.3) !important;
+  border: 1px solid rgba(242, 143, 56, 0.5) !important;
+  box-shadow: 0 12px 40px rgba(242, 143, 56, 0.15) !important;
+}
+
+[data-mantine-color-scheme='dark'] .processCardNext {
+  background: rgba(65, 99, 163, 0.4) !important;
+  border: 1px solid rgba(65, 99, 163, 0.6) !important;
+  box-shadow: 0 12px 40px rgba(65, 99, 163, 0.2) !important;
+}
+
+/* Far cards - more transparent and muted */
+.processCardFar {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-mantine-color-scheme='dark'] .processCardFar {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Card Content - Remove transitions to let framer-motion handle everything */
 .cardHeader {
   margin-bottom: 1.5rem;
+  transition: none !important;
 }
 
 .stepBadge {
-  background: var(--my-primary-light);
-  color: var(--my-primary);
+  background: #f28f38 !important;
+  color: white !important;
   font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: none !important;
+}
+
+/* Dark mode styling for step badge */
+[data-mantine-color-scheme='dark'] .stepBadge {
+  background: rgba(12, 38, 89, 0.9) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: none !important;
 }
 
 .stepIcon {
-  color: var(--my-primary);
+  color: white;
   opacity: 0.8;
+  transition: none !important;
+}
+
+/* Dark mode - keep icons white */
+[data-mantine-color-scheme='dark'] .stepIcon {
+  color: white;
+  opacity: 0.8;
+  transition: none !important;
 }
 
 .cardTitle {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--mantine-color-gray-9);
+  color: white;
   margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: none !important;
 }
 
 [data-mantine-color-scheme='dark'] .cardTitle {
-  color: var(--mantine-color-gray-1);
+  color: white;
+  transition: none !important;
 }
 
 .cardDescription {
   font-size: 1.125rem;
   line-height: 1.6;
-  color: var(--mantine-color-gray-7);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 1rem;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  transition: none !important;
 }
 
 [data-mantine-color-scheme='dark'] .cardDescription {
-  color: var(--mantine-color-gray-3);
+  color: rgba(255, 255, 255, 0.95);
+  transition: none !important;
 }
 
 .cardDetails {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--mantine-color-gray-6);
+  color: rgba(255, 255, 255, 0.8);
   font-style: italic;
   margin-bottom: 1.5rem;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  transition: none !important;
 }
 
 [data-mantine-color-scheme='dark'] .cardDetails {
-  color: var(--mantine-color-gray-4);
+  color: rgba(255, 255, 255, 0.8);
+  transition: none !important;
 }
 
 .highlightBadge {
