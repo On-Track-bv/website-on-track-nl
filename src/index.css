@@ -1,3 +1,34 @@
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  background: var(--my-bgheader);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--my-subtext);
+  border-radius: 6px;
+  border: 3px solid var(--my-bgheader);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--my-primary);
+}
+::-webkit-scrollbar-corner {
+  background: var(--my-bgheader);
+}
+
+/* Firefox */
+html {
+  scrollbar-color: var(--my-subtext) var(--my-bgheader);
+}
+
+html, body {
+  /* background: var(--my-bg) !important; */
+  width: 100%;
+  min-width: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   background: var(--my-bg) !important;
 }

@@ -14,7 +14,14 @@ import { Menu, Avatar, Text } from '@mantine/core';
 const linksNl = [
     { link: '#top', label: 'Home' },
     { link: '#why', label: 'Visie en missie' },
-    { link: '#what', label: 'Diensten' },
+    {
+      label: 'Diensten',
+      dropdown: [
+        { link: '#process', label: 'Proces' },
+        { link: '#consultancy', label: 'Consultancy' },
+        { link: '#software', label: 'Software' },
+      ]
+    },
     { link: '#who', label: 'Over ons' },
     { link: '#contact-us', label: 'Contact' },
 ];
@@ -22,14 +29,22 @@ const linksNl = [
 const linksEn = [
     { link: '#top', label: 'Home' },
     { link: '#why', label: 'Vision and mission' },
-    { link: '#what', label: 'Services' },
+    {
+      label: 'Services',
+      dropdown: [
+        { link: '#process', label: 'Process' },
+        { link: '#consultancy', label: 'Consultancy' },
+        { link: '#software', label: 'Software' },
+      ]
+    },
     { link: '#who', label: 'About us' },
     { link: '#contact-us', label: 'Contact' },
 ];
 
 export function Header() {
     const [opened, { toggle, close }] = useDisclosure(false);
-    const [active, setActive] = useState(linksNl[0].link);
+    const [activeMain, setActiveMain] = useState(linksNl[0].link);
+    const [activeSub, setActiveSub] = useState<string | null>(null);
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const { lang, setLang } = useLanguage();
 
@@ -37,54 +52,127 @@ export function Header() {
     const { role, setRole, roles } = useRole();
     const [roleMenuOpened, setRoleMenuOpened] = useState(false);
 
-    const items = links.map((link) => (
-        <a
-            key={link.label}
-            href={link.link}
-            className={classes.link}
-            data-active={active === link.link || undefined}
-            onClick={(event) => {
-                event.preventDefault();
-                if (link.link === '#top') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (link.link.startsWith('#')) {
-                    const el = document.getElementById(link.link.substring(1));
+    const items = links.map((link) => {
+      if (link.dropdown) {
+        return (
+          <Menu key={link.label} trigger="hover" openDelay={80} closeDelay={120} withinPortal>
+            <Menu.Target>
+              <span
+                className={classes.link}
+                style={{ cursor: 'pointer' }}
+                data-active={activeMain === link.label || undefined}
+              >
+                {link.label}
+              </span>
+            </Menu.Target>
+            <Menu.Dropdown className={classes.servicesDropdown}>
+              {link.dropdown.map((item) => (
+                <Menu.Item
+                  key={item.label}
+                  style={{ color: 'var(--my-text)', fontWeight: 600 }}
+                  className={activeSub === item.link ? classes.selectedServicesItem : undefined}
+                  data-active={activeSub === item.link || undefined}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--my-hover)'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = ''}
+                  onClick={e => {
+                    e.preventDefault();
+                    const el = document.getElementById(item.link.substring(1));
                     if (el) {
-                        const yOffset = -80;
-                        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                        window.scrollTo({ top: y, behavior: 'smooth' });
+                      const yOffset = -80;
+                      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
                     }
-                }
-                // Sluit de Drawer als hij open is (alleen op mobiel)
-                close();
-            }}
+                    setActiveMain(link.label);
+                    setActiveSub(item.link);
+                    close();
+                  }}
+                >
+                  {item.label}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
+        );
+      }
+      return (
+        <a
+          key={link.label}
+          href={link.link}
+          className={classes.link}
+          data-active={activeMain === link.link || undefined}
+          onClick={(event) => {
+            event.preventDefault();
+            if (link.link === '#top') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (link.link.startsWith('#')) {
+              const el = document.getElementById(link.link.substring(1));
+              if (el) {
+                const yOffset = -80;
+                const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+              }
+            }
+            setActiveMain(link.link);
+            setActiveSub(null);
+            close();
+          }}
         >
-            {link.label}
+          {link.label}
         </a>
-    ));
+      );
+    });
 
-    const sectionIds = links.map(link => link.link.replace('#', ''));
+    // Verzamel alle sectie-IDs inclusief dropdowns, met parent label
+    type SectionId = { id: string; parentLabel: string; link?: string };
+    const sectionIds: SectionId[] = [];
+    links.forEach(link => {
+      if (typeof link.link === 'string') {
+        sectionIds.push({ id: link.link.replace('#', ''), parentLabel: link.label, link: link.link });
+      }
+      if (link.dropdown) {
+        link.dropdown.forEach(item => {
+          sectionIds.push({ id: item.link.replace('#', ''), parentLabel: link.label });
+        });
+      }
+    });
 
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY + 100;
-            let currentSection = "#top";
-            for (const id of sectionIds) {
-                const el = document.getElementById(id);
+            let currentSection = sectionIds[0];
+            for (const section of sectionIds) {
+                const el = document.getElementById(section.id);
                 if (el) {
                     const top = el.offsetTop;
                     if (scrollPosition >= top) {
-                        currentSection = `#${id}`;
+                        currentSection = section;
                     }
                 }
             }
-            if (active !== currentSection) {
-                setActive(currentSection);
+            // Zet hoofdtab en subtab
+            let newActiveMain = '';
+            let newActiveSub: string | null = null;
+            const parentLink = links.find(l => l.label === currentSection.parentLabel);
+            if (parentLink) {
+                if (parentLink.dropdown) {
+                    newActiveMain = parentLink.label;
+                    // Kijk of het een subtab is
+                    const foundSub = parentLink.dropdown.find(item => item.link.replace('#', '') === currentSection.id);
+                    if (foundSub) {
+                        newActiveSub = foundSub.link;
+                    }
+                } else if (parentLink.link) {
+                    newActiveMain = parentLink.link;
+                }
+            }
+            if (activeMain !== newActiveMain || activeSub !== newActiveSub) {
+                setActiveMain(newActiveMain);
+                setActiveSub(newActiveSub);
             }
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [sectionIds, active]);
+    }, [sectionIds, activeMain, activeSub, links]);
 
     return (
         <header className={classes.header}>
@@ -133,6 +221,7 @@ export function Header() {
                               onClick={() => setRoleMenuOpened((o) => !o)}
                               title="Selecteer profiel"
                               style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}
+                              data-profile-btn
                             >
                               <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
                                 {role?.icon && (
@@ -204,7 +293,66 @@ export function Header() {
                 <nav>
                     <Box mb="md" /> {/* Voeg whitespace toe boven de links */}
                     <Stack gap="md">
-                        {items}
+                      {links.map((link) =>
+                        link.dropdown ? (
+                          <div key={link.label}>
+                            <div
+                              className={classes.link}
+                              style={{ fontWeight: 900, paddingLeft: 16, cursor: 'default', background: 'none' }}
+                            >
+                              {link.label}
+                            </div>
+                            <div>
+                              {link.dropdown.map((item) => (
+                                <a
+                                  key={item.label}
+                                  href={item.link}
+                                  className={activeSub === item.link ? classes.selectedServicesItem + ' ' + classes.link : classes.link}
+                                  style={{ display: 'block', fontWeight: 600, fontSize: '0.90rem', paddingLeft: 32, borderRadius: 'var(--mantine-radius-sm)' }}
+                                  onClick={event => {
+                                    event.preventDefault();
+                                    const el = document.getElementById(item.link.substring(1));
+                                    if (el) {
+                                      const yOffset = -80;
+                                      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                      window.scrollTo({ top: y, behavior: 'smooth' });
+                                    }
+                                    setActiveMain(link.label);
+                                    setActiveSub(item.link);
+                                    close();
+                                  }}
+                                >
+                                  {item.label}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <a
+                            key={link.label}
+                            href={link.link}
+                            className={classes.link}
+                            onClick={event => {
+                              event.preventDefault();
+                              if (link.link === '#top') {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              } else if (link.link.startsWith('#')) {
+                                const el = document.getElementById(link.link.substring(1));
+                                if (el) {
+                                  const yOffset = -80;
+                                  const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                  window.scrollTo({ top: y, behavior: 'smooth' });
+                                }
+                              }
+                              setActiveMain(link.link);
+                              setActiveSub(null);
+                              close();
+                            }}
+                          >
+                            {link.label}
+                          </a>
+                        )
+                      )}
                     </Stack>
                     <Group gap="md" mt="xl" justify="center">
                         <Button
@@ -236,7 +384,8 @@ export function Header() {
                               variant="transparent"
                               size="lg"
                               title="Selecteer profiel"
-                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}   
+                              style={{ marginLeft: 8, background: 'transparent', boxShadow: 'none' }}
+                              data-profile-btn
                             >
                               <Avatar radius="xl" size={32} className={classes.profileAvatar} style={{ background: 'var(--my-bgheader)', color: 'var(--my-primary)' }}>
                                 {role?.icon && (

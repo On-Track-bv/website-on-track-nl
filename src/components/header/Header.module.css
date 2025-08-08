@@ -1,3 +1,23 @@
+
+.servicesDropdown {
+  background: var(--my-bgheader) !important;
+  color: var(--my-primary) !important;
+  border: none!important;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+  overflow-y: auto!important;
+  max-height: none!important;
+}
+.selectedServicesItem {
+  background: var(--my-primary) !important;
+  color: var(--my-text-neg) !important;
+}
+
+@media (max-width: 600px) {
+  .servicesDropdown {
+    max-height: 320px;
+  }
+}
+
 /* Icon size for profile menu */
 .profileIcon {
   width: 24px;

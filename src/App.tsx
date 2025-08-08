@@ -36,49 +36,26 @@ function App() {
       <AppShell.Header>
         <Header />
       </AppShell.Header>
-      <AppShell.Main>
+ <AppShell.Main>
         <Container size="xl" style={{ textAlign: 'center' }}>
-          
           <Box id="top"  my="xl">
             <Home />
           </Box>
-          <Box id="why"  my="xl">
+          <Box id="why" my="xl">
             <VisionMission />
           </Box>
-          <Box id="what"  my="xl">
+          <Box id="what" my="xl">
             <Services />
           </Box>
-          <Box id="who"  my="xl">
+          <Box id="who" my="xl">
             <AboutUs />
           </Box>
-          
-
-          {/* <Group align="center" justify="center" gap="xl">
-            <Text size="xl" fw={700} span style={{ fontSize: 32, lineHeight: 1 }} role="img" aria-label="construction">🚧</Text>
-            <Text size="xl" fw={700}>Welcome to <b>On-Track</b></Text>
-            <Text size="xl" fw={700} span style={{ fontSize: 32, lineHeight: 1 }} role="img" aria-label="construction">🚧</Text>
-          </Group>
-          <Space h="xl" />
-          <Text>
-            We are working hard to bring you something awesome. Please check back soon!
-          </Text> */}
-
-          {/* <Box
-            my="xl"
-            style={{
-              width: 200, // or any size you prefer
-              height: 5000,
-              backgroundColor: '#ccc', // change to your desired color
-              margin: '0 auto', // center horizontally
-            }}
-          /> */}
-
           <Box id="contact-us" my="xl">
             <Contact />
           </Box>
         </Container>
-        <Footer />
       </AppShell.Main>
+      <Footer />
     </AppShell>
     </CrawlerProtection>
   )
