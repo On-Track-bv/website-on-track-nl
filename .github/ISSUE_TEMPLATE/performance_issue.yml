@@ -1,0 +1,285 @@
+name: ⚡ Performance Issue
+description: Report performance problems or optimization suggestions
+title: "[PERFORMANCE] "
+labels: ["performance", "needs-investigation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚡ Performance Issue
+        
+        Help us optimize the website! Report slow loading times, poor performance metrics, or suggest performance improvements.
+
+  - type: dropdown
+    id: performance-type
+    attributes:
+      label: 🎯 Performance Issue Type
+      description: What type of performance issue are you reporting?
+      options:
+        - 🐌 Slow page loading
+        - 📱 Mobile performance issues
+        - 🖼️ Image loading problems
+        - 📦 Large bundle size
+        - 🔄 Slow animations/transitions
+        - 💾 Memory usage issues
+        - 🌐 Network request optimization
+        - ⚡ JavaScript execution time
+        - 🎨 CSS rendering performance
+        - 📊 Core Web Vitals issues
+        - 🔍 SEO performance impact
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Performance Issue Description
+      description: Describe the performance problem you're experiencing
+      placeholder: |
+        What performance issue are you experiencing?
+        
+        When does this happen?
+        
+        How does it affect the user experience?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: How can we reproduce this performance issue?
+      placeholder: |
+        1. Go to [specific page]
+        2. Perform [specific action]
+        3. Observe [performance problem]
+        4. Measure using [tool/method]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: 📱 Device/Platform
+      description: Where are you experiencing this performance issue?
+      options:
+        - 💻 Desktop (High-end)
+        - 💻 Desktop (Low-end)
+        - 📱 Mobile (High-end)
+        - 📱 Mobile (Low-end)
+        - 📱 Tablet
+        - 🌐 All devices
+        - 🔧 Development environment
+        - 🚀 Production environment
+    validations:
+      required: true
+
+  - type: input
+    id: device-specs
+    attributes:
+      label: 🔧 Device Specifications
+      description: Device model, RAM, processor, etc.
+      placeholder: e.g., iPhone 14, MacBook Pro M2, Windows 10 i5-8400, etc.
+
+  - type: dropdown
+    id: network
+    attributes:
+      label: 🌐 Network Conditions
+      description: What network conditions are you testing under?
+      options:
+        - 🚀 Fast (Fiber/5G)
+        - ⚡ Regular (Broadband/4G)
+        - 🐌 Slow (3G/Slow broadband)
+        - 📡 Offline testing
+        - 🔧 Throttled (Developer tools)
+        - 🌍 Various conditions
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: 📊 Performance Metrics
+      description: Provide specific performance measurements if available
+      placeholder: |
+        Performance measurements:
+        
+        Lighthouse scores:
+        - Performance: __/100
+        - First Contentful Paint: __ms
+        - Largest Contentful Paint: __ms
+        - Time to Interactive: __ms
+        - Cumulative Layout Shift: __
+        
+        Other metrics:
+        - Page load time: __s
+        - Bundle size: __MB
+        - Time to first byte: __ms
+        - Network requests: __
+      render: text
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 🌐 Browser
+      description: Which browser are you using?
+      options:
+        - Chrome (Desktop)
+        - Firefox (Desktop)
+        - Safari (Desktop)
+        - Edge (Desktop)
+        - Chrome (Mobile)
+        - Safari (iOS)
+        - Samsung Internet
+        - Multiple browsers
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: tools-used
+    attributes:
+      label: 🔍 Performance Tools Used
+      description: What tools did you use to measure performance?
+      placeholder: |
+        Tools used:
+        - [ ] Chrome DevTools
+        - [ ] Lighthouse
+        - [ ] WebPageTest
+        - [ ] PageSpeed Insights
+        - [ ] GTmetrix
+        - [ ] Pingdom
+        - [ ] Network tab analysis
+        - [ ] Performance tab analysis
+        - [ ] Other: [specify]
+
+  - type: textarea
+    id: expected-performance
+    attributes:
+      label: ✅ Expected Performance
+      description: What performance level do you expect?
+      placeholder: |
+        Expected performance:
+        - Page should load in under [X] seconds
+        - Lighthouse score should be [X]/100
+        - Animations should be smooth (60fps)
+        - Bundle size should be under [X]MB
+        - Based on: [industry standards/competitor comparison]
+
+  - type: textarea
+    id: actual-performance
+    attributes:
+      label: ❌ Actual Performance
+      description: What performance are you actually experiencing?
+      placeholder: |
+        Actual performance:
+        - Page loads in [X] seconds
+        - Lighthouse score is [X]/100
+        - Animations are [choppy/slow]
+        - Bundle size is [X]MB
+        - Specific issues: [list problems]
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: 📊 Business Impact
+      description: How does this performance issue impact users/business?
+      options:
+        - 🚨 Critical - Users abandoning site
+        - ⚠️ High - Poor user experience
+        - 📢 Medium - Noticeable slowness
+        - 📝 Low - Minor optimization opportunity
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: 💡 Optimization Suggestions
+      description: Do you have any suggestions for improving performance?
+      placeholder: |
+        Potential optimizations:
+        - Optimize images (WebP, lazy loading)
+        - Code splitting/lazy loading
+        - Reduce bundle size
+        - Optimize CSS delivery
+        - Improve caching strategy
+        - Database query optimization
+        - CDN implementation
+        - Other ideas...
+
+  - type: textarea
+    id: analysis
+    attributes:
+      label: 🔍 Performance Analysis
+      description: Any additional analysis or findings?
+      placeholder: |
+        Analysis findings:
+        - Largest files: [list large assets]
+        - Slow network requests: [identify bottlenecks]
+        - JavaScript blocking: [identify blocking scripts]
+        - CSS issues: [render-blocking styles]
+        - Image optimization opportunities: [list images]
+        - Caching issues: [identify cache problems]
+
+  - type: checkboxes
+    id: areas
+    attributes:
+      label: 🎯 Performance Areas
+      description: Which performance areas are affected?
+      options:
+        - label: 🖼️ Image loading and optimization
+        - label: 📦 JavaScript bundle size
+        - label: 🎨 CSS delivery and rendering
+        - label: 🔄 Network requests and caching
+        - label: 📱 Mobile performance
+        - label: ⚡ JavaScript execution time
+        - label: 🎬 Animation performance
+        - label: 📊 Core Web Vitals
+        - label: 🔍 SEO performance scores
+        - label: 🌐 Cross-browser performance
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🌍 Environment Details
+      description: Additional environment information
+      placeholder: |
+        Environment details:
+        - Testing URL: [production/staging/local]
+        - Browser version: [specific version]
+        - Operating system: [OS and version]
+        - Connection type: [WiFi/Mobile/Ethernet]
+        - Time of testing: [when performance was measured]
+        - Geographic location: [if relevant]
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Performance Screenshots
+      description: Screenshots of performance tools or metrics
+      placeholder: |
+        Please attach screenshots of:
+        - Lighthouse reports
+        - DevTools Performance tab
+        - Network waterfall
+        - Bundle analyzer output
+        - Other performance tool results
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have tested this on multiple devices/browsers where possible
+          required: true
+        - label: I have provided specific performance measurements
+          required: true
+        - label: I have checked if similar performance issues exist
+          required: true
+        - label: I have tested on both development and production environments
+          required: false

@@ -1,5 +1,5 @@
 .form {
-  background: var(--my-bg);
+  background: none;
   padding: 2rem;
   border-radius: var(--mantine-radius-md);
   max-width: 1000px;

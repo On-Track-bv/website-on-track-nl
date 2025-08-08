@@ -18,11 +18,13 @@
     "@tabler/icons-react": "^3.34.1",
     "classnames": "^2.5.1",
     "dompurify": "^3.2.6",
+    "framer-motion": "^12.23.12",
     "react": "^19.1.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "^19.1.0",
     "react-google-recaptcha": "^3.1.0",
-    "react-phone-input-2": "^2.15.1"
+    "react-phone-input-2": "^2.15.1",
+    "react-svg": "^16.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

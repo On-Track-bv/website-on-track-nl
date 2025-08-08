@@ -1,0 +1,41 @@
+# .htaccess voor gemiddelde crawler bescherming
+# Blokkeert alleen agressieve scrapers, niet legitieme zoekmachines
+
+RewriteEngine On
+
+# Blokkeer alleen bekende agressieve scrapers (niet Google, Bing etc.)
+RewriteCond %{HTTP_USER_AGENT} (semrushbot|ahrefsbot|mj12bot|dotbot|seznambot|scrapy|python-requests|wget|curl|httrack|winhttp|go-http-client) [NC]
+RewriteRule ^(.*)$ - [F,L]
+
+# Rate limiting voor bots (optioneel, vereist mod_evasive)
+# <IfModule mod_evasive.c>
+#   DOSPageCount        3
+#   DOSPageInterval     1
+#   DOSBlockingPeriod   60
+# </IfModule>
+
+# Bescherm tegen hotlinking van afbeeldingen
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?on-track\.nl [NC]
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?google\. [NC]
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?bing\. [NC]
+RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [F]
+
+# Blokkeer toegang tot gevoelige bestanden
+<Files "*.log">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files ".env">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Headers voor matige beveiliging
+<IfModule mod_headers.c>
+    # Alleen noarchive en nosnippet, indexering wel toestaan
+    Header always set X-Robots-Tag "noarchive, nosnippet"
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options SAMEORIGIN
+</IfModule>

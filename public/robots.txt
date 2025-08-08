@@ -1,0 +1,44 @@
+# Robots.txt voor On-Track website
+# Gemiddelde bescherming: blokkeer bekende scrapers, sta legitieme crawlers toe
+
+# Sta legitieme zoekmachine crawlers toe
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Blokkeer bekende scrapers en agressieve crawlers
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: SeznamBot
+Disallow: /
+
+User-agent: facebookexternalhit
+Disallow: /
+
+# Voor alle andere bots: beperkte toegang
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Allow: /
+
+# Crawl-delay voor alle bots (respectvolle crawling)
+Crawl-delay: 1
+
+# Verwijs naar je sitemap voor betere indexering
+Sitemap: https://on-track.nl/sitemap.xml
