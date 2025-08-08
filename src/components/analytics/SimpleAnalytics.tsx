@@ -85,15 +85,23 @@ export function SimpleAnalytics({
     
     // Make tracking functions available globally
     useEffect(() => {
-        (window as any).trackEvent = trackEvent;
+        (window as Window & typeof globalThis & {
+            trackEvent: typeof trackEvent;
+            trackContactForm: () => void;
+            trackFeatureInteraction: (featureName: string) => void;
+        }).trackEvent = trackEvent;
         
         // Contact form tracking
-        (window as any).trackContactForm = () => {
+        (window as Window & typeof globalThis & {
+            trackContactForm: () => void;
+        }).trackContactForm = () => {
             trackEvent('contact_form_view', { section: 'contact' });
         };
         
         // Feature interaction tracking
-        (window as any).trackFeatureInteraction = (featureName: string) => {
+        (window as Window & typeof globalThis & {
+            trackFeatureInteraction: (featureName: string) => void;
+        }).trackFeatureInteraction = (featureName: string) => {
             trackEvent('feature_interaction', { feature: featureName });
         };
         

@@ -107,10 +107,10 @@ export function Contact() {
             };
 
             await emailjs.send(
-                'service_ypr4idc',
-                'template_3r6zip3',
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
                 templateParams,
-                'wcDCkSKWdKMZlZ2QZ'
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             );
             setFeedback(t.success);
             form.reset();
@@ -192,7 +192,7 @@ export function Contact() {
             />
             <div className={classes.captchaBox}>
                 <ReCAPTCHA
-                    sitekey="6LfXsYsrAAAAABaxstZ-CnPWqzGJr_fGMsgivilt"
+                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                     size="normal"
                     ref={recaptchaRef}
                     onChange={handleCaptchaChange}

@@ -23,12 +23,12 @@ const AGGRESSIVE_CRAWLERS = [
 // Type declarations for window properties
 declare global {
     interface Window {
-        chrome?: any;
-        callPhantom?: any;
-        _phantom?: any;
-        Buffer?: any;
-        emit?: any;
-        spawn?: any;
+        chrome?: unknown;
+        callPhantom?: unknown;
+        _phantom?: unknown;
+        Buffer?: unknown;
+        emit?: unknown;
+        spawn?: unknown;
     }
 }
 

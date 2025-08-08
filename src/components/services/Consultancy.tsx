@@ -3,8 +3,9 @@ import { Container, SimpleGrid, Title, Text } from '@mantine/core';
 import classes from './Services.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useRole } from '../../contexts/RoleContext';
-import { servicesContent } from './Services';
-import { Feature, getRoleGroup } from './FeatureSectionUtils';
+import { servicesContent } from './servicesContent';
+import { Feature, type FeatureProps } from './FeatureSectionUtils';
+import { getRoleGroup } from '../../utils/roleUtils';
 
 export function Consultancy() {
   const { lang } = useLanguage();
@@ -22,7 +23,7 @@ export function Consultancy() {
         spacing={{ base: 'xl', md: 50 }}
         verticalSpacing={{ base: 'xl', md: 50 }}
       >
-        {t.consultancy.map((feature: any, idx: number) => (
+        {t.consultancy.map((feature: FeatureProps, idx: number) => (
           <Feature key={idx} {...feature} />
         ))}
       </SimpleGrid>

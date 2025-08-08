@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Burger, Container, Group, ActionIcon, Button, Drawer, Stack, Box } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import ReactCountryFlag from "react-country-flag";
@@ -133,18 +133,21 @@ export function Header() {
     });
 
     // Verzamel alle sectie-IDs inclusief dropdowns, met parent label
-    type SectionId = { id: string; parentLabel: string; link?: string };
-    const sectionIds: SectionId[] = [];
-    links.forEach(link => {
-      if (typeof link.link === 'string') {
-        sectionIds.push({ id: link.link.replace('#', ''), parentLabel: link.label, link: link.link });
-      }
-      if (link.dropdown) {
-        link.dropdown.forEach(item => {
-          sectionIds.push({ id: item.link.replace('#', ''), parentLabel: link.label });
-        });
-      }
-    });
+    const sectionIds = useMemo(() => {
+      type SectionId = { id: string; parentLabel: string; link?: string };
+      const ids: SectionId[] = [];
+      links.forEach(link => {
+        if (typeof link.link === 'string') {
+          ids.push({ id: link.link.replace('#', ''), parentLabel: link.label, link: link.link });
+        }
+        if (link.dropdown) {
+          link.dropdown.forEach(item => {
+            ids.push({ id: item.link.replace('#', ''), parentLabel: link.label });
+          });
+        }
+      });
+      return ids;
+    }, [links]);
 
     useEffect(() => {
         const handleScroll = () => {

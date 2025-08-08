@@ -1,10 +1,10 @@
-
 import { Container, SimpleGrid, Title, Text } from '@mantine/core';
 import classes from './Services.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useRole } from '../../contexts/RoleContext';
-import { servicesContent } from './Services';
-import { Feature, getRoleGroup } from './FeatureSectionUtils';
+import { servicesContent } from './servicesContent';
+import { getRoleGroup } from '../../utils/roleUtils';
+import { Feature, type FeatureProps } from './FeatureSectionUtils';
 
 export function Software() {
   const { lang } = useLanguage();
@@ -22,7 +22,7 @@ export function Software() {
         spacing={{ base: 'xl', md: 50 }}
         verticalSpacing={{ base: 'xl', md: 50 }}
       >
-        {t.software.map((feature: any, idx: number) => (
+        {t.software.map((feature: FeatureProps, idx: number) => (
           <Feature key={idx} {...feature} />
         ))}
       </SimpleGrid>
