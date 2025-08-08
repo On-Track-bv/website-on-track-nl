@@ -1,0 +1,115 @@
+.wrapper {
+  width: 100%;
+  background: var(--my-bg);
+  padding: 3rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--my-inputfields);
+  border-radius: var(--mantine-radius-md);
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.04);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--my-primary);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+}
+
+.avatar {
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  border: 2px solid var(--my-primary);
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--my-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+.role {
+  font-size: 1rem;
+  color: var(--my-accent2);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.email {
+  font-size: 0.95rem;
+  color: var(--my-text);
+  margin-bottom: 1rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+.story {
+  font-size: 1rem;
+  color: var(--my-text);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+.button {
+  background: var(--my-primary);
+  color: var(--my-text-neg);
+  font-weight: 700;
+  border-radius: var(--mantine-radius-sm);
+  transition: background 0.2s;
+  width: 100%;
+  margin-top: auto;
+}
+
+.button:hover {
+  background: var(--my-accent);
+  color: var(--my-text-neg);
+}
+
+.infoLine {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.95rem;
+  color: var(--my-text);
+  margin-bottom: 1rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+@media (max-width: 600px) {
+  .infoLine {
+    flex-direction: column;
+    gap: 0.1em;
+  }
+}
+
+.dot {
+  font-size: 1em; 
+  color: var(--my-text);
+  margin: 0 0.2em;
+  align-self: center;
+  line-height: 1;
+  position: relative;
+  top: -0.55em; 
+}

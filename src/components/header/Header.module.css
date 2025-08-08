@@ -1,37 +1,134 @@
+/* Icon size for profile menu */
+.profileIcon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profileIcon svg {
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 24px !important;
+}
+/* Algemene styling voor alle profiel-items in de dropdown */
+.profileItem {
+  background: transparent;
+  color: var(--my-primary)!important;
+}
+.profileItem svg {
+  color: var(--my-primary)!important;
+}
+
+/* Geselecteerde profiel in dropdown: exact als actieve .link */
+.selectedProfileItem {
+  background: var(--my-primary) !important;
+  color: var(--my-text-neg) !important;
+}
+.selectedProfileItem svg {
+  color: var(--my-text-neg) !important;
+}
+
+/* Huisstijl achtergrond voor de hele profiel-dropdown */
+/* Responsive max-height voor profiel-dropdown */
+.profileDropdown {
+  background: var(--my-bgheader) !important;
+  color: var(--my-primary) !important;
+  border: none !important;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+  overflow-y: auto;
+  max-height: none;
+}
+
+@media (max-width: 600px) {
+  .profileDropdown {
+    max-height: 320px;
+  }
+}
+/* Force icon color in Avatar/profile button to use huisstijl primary (alleen lijnkleur, niet fill) */
+.profileAvatar svg {
+  color: var(--my-primary) !important;
+}
 .header {
-  height: 56px;
+  height: 70px;
   margin-bottom: 120px;
-  background-color: var(--mantine-color-body);
+  background-color: var( --my-bgheader);
   border-bottom: 1px solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
 .inner {
-  height: 56px;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
+.rightGroups {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px; /* Adjust spacing as needed */
+  flex: 1;
+}
+.actionIcon:hover,
+.actionIcon[data-hover] {
+  background-color: var(--my-hover) !important;
+}
+.languageButton button,
+.languageButton:hover,
+.languageButton[data-hover] {
+  background-color: var(--my-hover) !important;
+}
 .link {
   display: block;
   line-height: 1;
   padding: 8px 12px;
   border-radius: var(--mantine-radius-sm);
   text-decoration: none;
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  color: var(--my-text);
   font-size: var(--mantine-font-size-sm);
-  font-weight: 500;
+  font-weight: 900;
+  
 
-  @mixin hover {
-    background-color: light-dark(
-      var(--mantine-color-gray-0),
-      var(--mantine-color-dark-6)
-    );
-  }
 
   [data-mantine-color-scheme] &[data-active] {
-    background-color: var(--mantine-color-blue-filled);
-    color: var(--mantine-color-white);
+    background-color: var(--my-primary);
+    color: var(--my-text-neg);
   }
+}
+.link:hover,
+.link[data-hover] {
+  background-color: var(--my-hover) !important;
+}
+
+/* Hover effect voor Menu.Item in profiel-dropdown (light en dark mode) */
+[class*="profileDropdown"] .mantine-Menu-item:hover,
+[class*="profileDropdown"] .mantine-Menu-item[data-hover],
+[class*="profileDropdown"] .mantine-Menu-item[tabindex]:hover,
+[class*="profileDropdown"] .mantine-Menu-item[tabindex][data-hover],
+[class*="profileDropdown"] .mantine-Menu-item.mantine-Menu-itemHovered,
+[class*="profileDropdown"] .mantine-Menu-item.mantine-Menu-itemActive,
+[class*="profileDropdown"] .mantine-Menu-item:active,
+[class*="profileDropdown"] .mantine-Menu-item:focus-visible {
+  background-color: var(--my-menuitem-hover, var(--my-hover)) !important;
+}
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item:hover,
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item[data-hover],
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item[tabindex]:hover,
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item[tabindex][data-hover],
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item.mantine-Menu-itemHovered,
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item.mantine-Menu-itemActive,
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item:active,
+[data-mantine-color-scheme="dark"] .profileDropdown .mantine-Menu-item:focus-visible {
+  background-color: var(--my-hover) !important;
+}
+.phoneContainer {
+  margin-bottom: 1rem;
+}
+.phoneButton {
+  background: var(--my-primary);
+}
+.phoneDropdown {
+  background: var(--my-bg);
 }

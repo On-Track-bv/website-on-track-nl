@@ -1,1 +1,9 @@
 # website-on-track-nl
+
+All images and media in /assets/on-track are © On-Track B.V.. All rights reserved. No reuse or redistribution is permitted without explicit written permission.
+
+Disclaimer 
+De content op deze website is door On-Track B.V. met de grootst mogelijke zorg samengesteld, doch aanvaarden we geen aansprakelijkheid ten aanzien van mogelijke onjuistheden van de inhoud. On-Track B.V. is niet verantwoordelijk voor content op de aan deze website gekoppelde bestanden en/of websites waarnaar wordt verwezen. Ongeautoriseerd of oneigenlijk gebruik van de content of delen daarvan, maken inbreuk op intellectuele rechten. Toestemming tot het gebruik van de getoonde content of delen daarvan op publiekelijk toegankelijke plaatsen dient mag alleen na schriftelijke toestemming vanuit On-Track B.V.. Voor vragen kun je met ons telefonisch of via mail contact opnemen.
+
+Disclaimer EN
+The content on this website has been compiled with the greatest possible care by On-Track B.V., but we accept no liability for any inaccuracies in the content. On-Track B.V. is not responsible for the content of files and/or websites linked to this website. Unauthorized or improper use of the content or parts thereof infringes intellectual property rights. Permission to use the displayed content or parts thereof in publicly accessible places may only be granted with written consent from On-Track B.V. For questions, you can contact us by phone or email.
