@@ -76,6 +76,12 @@ export function Header() {
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = ''}
                   onClick={e => {
                     e.preventDefault();
+                    
+                    // Only dispatch header navigation event for non-process links
+                    if (item.link !== '#process') {
+                      window.dispatchEvent(new CustomEvent('header-navigation'));
+                    }
+                    
                     const el = document.getElementById(item.link.substring(1));
                     if (el) {
                       const yOffset = -80;
@@ -102,6 +108,10 @@ export function Header() {
           data-active={activeMain === link.link || undefined}
           onClick={(event) => {
             event.preventDefault();
+            
+            // Dispatch header navigation event
+            window.dispatchEvent(new CustomEvent('header-navigation'));
+            
             if (link.link === '#top') {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (link.link.startsWith('#')) {
@@ -178,7 +188,14 @@ export function Header() {
         <header className={classes.header}>
             <Container size="lg" className={classes.inner}>
                 {/* Logo altijd zichtbaar */}
-                <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                <a href="#top" onClick={e => { 
+                  e.preventDefault(); 
+                  
+                  // Dispatch header navigation event
+                  window.dispatchEvent(new CustomEvent('header-navigation'));
+                  
+                  window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                }}>
                     <img
                         src={colorScheme === 'dark' ? onTrackBeeldmerkDark : onTrackBeeldmerkLight}
                         alt="On-Track logo"
@@ -311,6 +328,12 @@ export function Header() {
                                   style={{ display: 'block', fontWeight: 600, fontSize: '0.90rem', paddingLeft: 32, borderRadius: 'var(--mantine-radius-sm)' }}
                                   onClick={event => {
                                     event.preventDefault();
+                                    
+                                    // Only dispatch header navigation event for non-process links
+                                    if (item.link !== '#process') {
+                                      window.dispatchEvent(new CustomEvent('header-navigation'));
+                                    }
+                                    
                                     const el = document.getElementById(item.link.substring(1));
                                     if (el) {
                                       const yOffset = -80;
@@ -334,6 +357,12 @@ export function Header() {
                             className={classes.link}
                             onClick={event => {
                               event.preventDefault();
+                              
+                              // Only dispatch header navigation event for non-process links
+                              if (link.link !== '#process') {
+                                window.dispatchEvent(new CustomEvent('header-navigation'));
+                              }
+                              
                               if (link.link === '#top') {
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               } else if (link.link.startsWith('#')) {

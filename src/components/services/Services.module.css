@@ -68,3 +68,23 @@
 .featureDescription {
   color: var(--my-subtext2) !important;
 }
+
+/* Mobile collapsible features */
+@media (max-width: 768px) {
+  .feature {
+    padding: 1.5rem 1rem !important;
+    cursor: pointer !important;
+    position: relative !important;
+  }
+  
+  .featureTitle {
+    margin-bottom: 0 !important;
+    text-align: center !important;
+  }
+  
+  .expandButton {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+  }
+}

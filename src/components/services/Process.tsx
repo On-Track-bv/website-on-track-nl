@@ -83,21 +83,94 @@ export function Process() {
   const programmaticScrollRef = useRef(false);
   const lastWheelTimeRef = useRef(0);
   const touchpadDebounceRef = useRef<number | null>(null);
+  const headerNavigationRef = useRef(false);
+
+  // Check if mobile/tablet
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 992);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Listen for header navigation events
+  useEffect(() => {
+    const handleHeaderNavigation = () => {
+      headerNavigationRef.current = true;
+      
+      // Reset flag after scroll would complete
+      setTimeout(() => {
+        headerNavigationRef.current = false;
+      }, 1000);
+    };
+
+    window.addEventListener('header-navigation', handleHeaderNavigation);
+    
+    return () => window.removeEventListener('header-navigation', handleHeaderNavigation);
+  }, []);
 
   useEffect(() => {
+    // Skip scroll hijacking on mobile/tablet
+    if (isMobile) return;
+    
     // Initialize scroll position
     lastScrollYRef.current = window.scrollY;
     
     const handleWheel = (e: WheelEvent) => {
-      if (!isInScrollZone || !sectionRef.current) return;
+      if (!sectionRef.current) return;
+
+      // Block scroll during programmatic scroll to section
+      if (programmaticScrollRef.current) {
+        e.preventDefault();
+        return;
+      }
+
+      // Check for header navigation - bypass scroll lock completely
+      if (headerNavigationRef.current) {
+        if (isInScrollZone) {
+          setIsInScrollZone(false);
+          scrollCounterRef.current = 0;
+          exitCooldownRef.current = true;
+          
+          setTimeout(() => {
+            exitCooldownRef.current = false;
+          }, 300);
+        }
+        return; // Don't prevent default - let header navigation scroll through
+      }
+
+      // Better touchpad detection - touchpads usually have fractional deltaY values
+      const isTouchpad = e.deltaY % 1 !== 0 || Math.abs(e.deltaY) < 40;
+      
+      // Detect mega fast scroll (bypass scroll lock completely) - higher threshold
+      const isMegaFastScroll = Math.abs(e.deltaY) > 300; // Much higher threshold
+      if (isMegaFastScroll) {
+        // Force exit scroll lock for mega fast scroll - don't prevent default!
+        if (isInScrollZone) {
+          setIsInScrollZone(false);
+          scrollCounterRef.current = 0;
+          exitCooldownRef.current = true;
+          
+          setTimeout(() => {
+            exitCooldownRef.current = false;
+          }, 200);
+        }
+        // Don't prevent default - let the scroll happen naturally
+        return;
+      }
+
+      if (!isInScrollZone) return;
 
       e.preventDefault();
       
       const now = Date.now();
       lastWheelTimeRef.current = now;
-      
-      // Better touchpad detection - touchpads usually have fractional deltaY values
-      const isTouchpad = e.deltaY % 1 !== 0 || Math.abs(e.deltaY) < 40;
       
       // For touchpad, add debouncing to prevent rapid consecutive events
       if (isTouchpad) {
@@ -182,13 +255,46 @@ export function Process() {
       const headerHeight = 80; // Height of the header
       const windowHeight = window.innerHeight;
       
-      // Skip direction detection during cooldown or programmatic scrolls
-      if (exitCooldownRef.current || programmaticScrollRef.current) return;
-      
-      // Detect scroll direction
+      // Detect scroll direction and speed
       const currentScrollY = window.scrollY;
       const scrollDirection = currentScrollY > lastScrollYRef.current ? 'down' : 'up';
+      const scrollSpeed = Math.abs(currentScrollY - lastScrollYRef.current);
       lastScrollYRef.current = currentScrollY;
+      
+      // Detect mega fast scroll from header navigation or manual scroll
+      const isMegaFastScroll = scrollSpeed > 500; // Higher threshold
+      
+      // Check for header navigation first - bypass all logic
+      if (headerNavigationRef.current) {
+        if (isInScrollZone) {
+          setIsInScrollZone(false);
+          scrollCounterRef.current = 0;
+          exitCooldownRef.current = true;
+          
+          setTimeout(() => {
+            exitCooldownRef.current = false;
+          }, 500);
+        }
+        return; // Let header navigation pass through completely
+      }
+      
+      // Skip ALL logic for mega fast scrolls - let them pass through completely
+      if (isMegaFastScroll) {
+        if (isInScrollZone) {
+          // Force exit scroll lock immediately
+          setIsInScrollZone(false);
+          scrollCounterRef.current = 0;
+          exitCooldownRef.current = true;
+          
+          setTimeout(() => {
+            exitCooldownRef.current = false;
+          }, 300);
+        }
+        return; // Don't do any other processing for fast scrolls
+      }
+      
+      // Skip direction detection during cooldown or programmatic scrolls
+      if (exitCooldownRef.current || programmaticScrollRef.current) return;
       
       // Simple and reliable activation logic:
       // Activate when scrolling INTO the section area (but not when exiting away from it)
@@ -207,6 +313,15 @@ export function Process() {
         setIsInScrollZone(true);
         scrollCounterRef.current = 0;
         programmaticScrollRef.current = true;
+        
+        // Set the correct starting step based on scroll direction
+        if (scrollDirection === 'down') {
+          // Coming from above - start at first step
+          setActiveStep(0);
+        } else if (scrollDirection === 'up') {
+          // Coming from below - start at last step
+          setActiveStep(processSteps.length - 1);
+        }
         
         // Always snap to optimal position
         const targetScrollY = section.offsetTop - headerHeight;
@@ -240,7 +355,7 @@ export function Process() {
         clearTimeout(touchpadDebounceRef.current);
       }
     };
-  }, [activeStep, isInScrollZone]);
+  }, [activeStep, isInScrollZone, isMobile]);
 
   return (
     <section className={classes.processSection} ref={sectionRef} id="process">
@@ -291,37 +406,73 @@ export function Process() {
               const isNext = index > activeStep;
               
               // Calculate position and scale based on relationship to active step
+              // For mobile, adjust animation to make all cards more visible
               let xOffset = 0;
               let scale = 0.85;
               let zIndex = 1;
               let opacity = 0.6;
               let blurAmount = 20;
               
-              if (isActive) {
-                xOffset = 0;
-                scale = 1;
-                zIndex = 3;
-                opacity = 1;
-                blurAmount = 35; // Veel meer blur voor super glassy effect
-              } else if (isPrev) {
-                xOffset = -80;
-                scale = 0.9;
-                zIndex = 2;
-                opacity = 0.8;
-                blurAmount = 15;
-              } else if (isNext) {
-                xOffset = 80;
-                scale = 0.9;
-                zIndex = 2;
-                opacity = 0.8;
-                blurAmount = 15;
+              // Calculate half card width for proper centering on mobile
+              const halfCardWidth = isMobile ? (window.innerWidth * 0.9) / 2 : 180; // Fallback to 180 for desktop
+              
+              if (isMobile) {
+                // Mobile: more visible background cards with smaller center offset
+                const centerOffset = window.innerWidth * 0.05; // Much smaller offset - just 5% of screen width
+                
+                if (isActive) {
+                  xOffset = centerOffset;
+                  scale = 1;
+                  zIndex = 3;
+                  opacity = 1;
+                  blurAmount = 35;
+                } else if (isPrev) {
+                  xOffset = centerOffset - 120; // 120px to the left of center
+                  scale = 0.95; // Larger scale
+                  zIndex = 2;
+                  opacity = 0.9; // More visible
+                  blurAmount = 15;
+                } else if (isNext) {
+                  xOffset = centerOffset + 120; // 120px to the right of center
+                  scale = 0.95; // Larger scale
+                  zIndex = 2;
+                  opacity = 0.9; // More visible
+                  blurAmount = 15;
+                } else {
+                  xOffset = centerOffset + (index < activeStep ? -180 : 180); // Even bigger offset for far cards
+                  scale = 0.9; // Larger scale
+                  zIndex = 1;
+                  opacity = 0.8; // Much more visible
+                  blurAmount = 8;
+                }
               } else {
-                // Cards further away
-                xOffset = index < activeStep ? -120 : 120;
-                scale = 0.85;
-                zIndex = 1;
-                opacity = 0.5;
-                blurAmount = 8; // Minder blur voor verre kaarten
+                // Desktop: original settings
+                if (isActive) {
+                  xOffset = 0;
+                  scale = 1;
+                  zIndex = 3;
+                  opacity = 1;
+                  blurAmount = 35; // Veel meer blur voor super glassy effect
+                } else if (isPrev) {
+                  xOffset = -80;
+                  scale = 0.9;
+                  zIndex = 2;
+                  opacity = 0.8;
+                  blurAmount = 15;
+                } else if (isNext) {
+                  xOffset = 80;
+                  scale = 0.9;
+                  zIndex = 2;
+                  opacity = 0.8;
+                  blurAmount = 15;
+                } else {
+                  // Cards further away
+                  xOffset = index < activeStep ? -120 : 120;
+                  scale = 0.85;
+                  zIndex = 1;
+                  opacity = 0.5;
+                  blurAmount = 8; // Minder blur voor verre kaarten
+                }
               }
               
               return (
@@ -329,9 +480,10 @@ export function Process() {
                   key={step.id}
                   ref={el => { cardRefs.current[index] = el; }}
                   className={classes.cardContainer}
-                  initial={{ x: 0, scale: 0.85, opacity: 0.6 }}
+                  initial={{ x: -200, y: -200, scale: 0.85, opacity: 0.6 }}
                   animate={{ 
-                    x: xOffset,
+                    x: isMobile ? xOffset - halfCardWidth : xOffset, // Use calculated half width for centering on mobile
+                    y: isMobile ? -200 : 0, // Subtract half height for centering on mobile  
                     scale: scale,
                     opacity: opacity,
                     rotateY: isActive ? 0 : (isPrev ? 15 : isNext ? -15 : (index < activeStep ? 25 : -25))
@@ -351,12 +503,12 @@ export function Process() {
                     animate={{
                       backdropFilter: `blur(${blurAmount}px)`,
                       backgroundColor: isActive 
-                        ? 'rgba(255, 255, 255, 0.25)' // Meer transparant maar behoud glassmorphism
+                        ? 'rgba(255, 255, 255, 0.25)'
                         : isPrev 
                         ? 'rgba(88, 158, 166, 0.25)'
                         : isNext
                         ? 'rgba(242, 143, 56, 0.25)'
-                        : 'rgba(255, 255, 255, 0.1)' // Heel transparant voor verre kaarten
+                        : 'rgba(255, 255, 255, 0.1)'
                     }}
                     transition={{ 
                       type: "spring",
@@ -366,11 +518,10 @@ export function Process() {
                     }}
                     style={{
                       borderRadius: '20px',
-                      height: '100%', // Vul de hele container
-                      minHeight: 'min(400px, 55vh)', // Responsive minimum hoogte
-                      maxHeight: 'min(500px, 65vh)', // Responsive maximum hoogte
+                      height: '100%',
+                      minHeight: 'min(400px, 55vh)',
+                      maxHeight: 'min(500px, 65vh)',
                       position: 'relative',
-                      overflow: 'hidden',
                       border: isActive 
                         ? '2px solid rgba(255, 255, 255, 0.6)'
                         : isPrev
@@ -387,7 +538,7 @@ export function Process() {
                   >
                     <motion.div
                       animate={{
-                        opacity: isActive ? 1 : isPrev || isNext ? 0.3 : 0.1 // Veel minder zichtbaar voor inactieve kaarten
+                        opacity: isActive ? 1 : isPrev || isNext ? 0.3 : 0.1
                       }}
                       transition={{ 
                         type: "spring",

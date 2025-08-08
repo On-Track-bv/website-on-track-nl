@@ -6,19 +6,22 @@
   position: relative;
   margin-top: 12rem;
   margin-bottom: 12rem;
-  overflow: hidden;
+  overflow: visible; /* Laat afgeronde hoeken zien */
   /* Make it full width of the viewport */
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  border-radius: 20px; /* Afgeronde hoeken voor hele sectie */
 }
 .cardContainer {
   position: absolute;
   top: clamp(1vh, 10%, 10vh); /* Minimum 1vh, voorkeur 10%, maximum 10vh */
-  left: 10%; /* Geen left offset - gebruik volledige beschikbare breedte */
+  left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
   transform: translateY(-50%); /* Alleen verticaal centreren */
-  width: 100%; /* Gebruik alle beschikbare ruimte */
+  width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
   max-width: none; /* Geen viewport-based limiet */
   height: min(450px, 60vh); /* Responsive hoogte */
+  overflow: visible; /* Laat zijkanten van kaarten zien */
+  border-radius: 20px; /* Afgeronde hoeken voor container */
   /* Remove old transitions - framer-motion handles this now */
 }
 
@@ -33,7 +36,7 @@
   min-height: min(400px, 55vh); /* Responsive minimum hoogte */
   max-height: min(500px, 65vh); /* Responsive maximum hoogte */
   position: relative;
-  overflow: hidden;
+  overflow: hidden !important; /* Houd tekst binnen de kaart */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -359,20 +362,23 @@
   width: 100%; /* Gebruik beschikbare grid ruimte */
   min-width: 600px; /* Minimum breedte voor kaarten */
   max-height: calc(100vh - 280px); /* Zorg dat kaarten niet te hoog worden */
-  overflow: visible;
+  overflow: visible; /* Laat zijkanten van kaarten zien */
   perspective: 1000px;
   padding-left: 0;
   margin-left: 2rem;
+  border-radius: 20px; /* Afgeronde hoeken voor hele cards container */
 }
 
 .cardContainer {
   position: absolute;
   top: 10%; /* Standaard 10% voor normale schermen */
-  left: 10%; /* Geen left offset - gebruik volledige beschikbare breedte */
+  left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
   transform: translateY(-50%); /* Alleen verticaal centreren */
-  width: 100%; /* Gebruik alle beschikbare ruimte */
+  width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
   max-width: none; /* Geen viewport-based limiet */
   height: min(450px, 60vh); /* Responsive hoogte */
+  overflow: visible; /* Laat zijkanten van kaarten zien */
+  border-radius: 20px; /* Afgeronde hoeken voor container */
   /* Remove old transitions - framer-motion handles this now */
 }
 
@@ -387,7 +393,7 @@
   min-height: min(400px, 55vh); /* Responsive minimum hoogte */
   max-height: min(500px, 65vh); /* Responsive maximum hoogte */
   position: relative;
-  overflow: hidden;
+  overflow: hidden !important; /* Houd tekst binnen de kaart */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -564,15 +570,23 @@
 @media (max-width: 992px) {
   .processContent {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 0rem; /* Kleinere gap tussen nav en cards */
+  }
+
+  .processHeader {
+    margin-bottom: 1rem; /* Veel minder spacing onder header */
+  }
+
+  .processContainer {
+    padding: 1rem; /* Minder padding op mobile */
   }
 
   .processNav {
-    order: 2;
+    order: 1; /* Nav goes to top */
   }
 
   .processCards {
-    order: 1;
+    order: 2; /* Cards go below nav */
   }
 
   .navSticky {
@@ -580,36 +594,74 @@
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 1.25rem; /* Meer spacing tussen tabs */
+    margin-bottom: 0rem; /* Geen extra spacing naar kaarten */
   }
 
   .navItem {
     flex-direction: column;
     text-align: center;
-    min-width: 120px;
+    min-width: 90px; /* Breder voor tekst + nummer */
+    max-width: 90px;
+    padding: 0.75rem 0.5rem;
+    border-radius: 12px; /* Minder rond voor tekst */
   }
 
   .navContent {
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+    display: block; /* Toon tekst op mobile */
+  }
+
+  .navTitle {
+    font-size: 0.7rem; /* Kleinere tekst voor mobile */
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+
+  .navSubtitle {
+    display: none; /* Verberg subtitle op tablet */
+  }
+
+  .navNumber {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem; /* Ruimte voor tekst */
   }
 
   .cardContainer {
-    position: relative !important;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    margin-bottom: 2rem;
+    position: absolute !important; /* Behoud absolute positioning voor animaties */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
+    margin-bottom: 1rem; /* Minder margin */
+    top: 50% !important; /* Center vertically */
+    left: 50% !important; /* Center horizontally as base position for framer-motion */
+    /* Remove transform override - let framer-motion handle all transforms including centering */
+    width: 90% !important; /* Volle breedte op mobile */
+    height: min(500px, 65vh) !important; /* Hogere kaarten */
+    overflow: visible !important; /* Laat animaties zien op mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op mobile */
   }
 
   .processCards {
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2rem !important;
+    height: 100% !important;
+    display: flex !important; /* Behoud flex voor animaties */
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important; /* No gap for overlapping effect */
+    margin-left: 0 !important;
+    min-width: auto !important;
+    perspective: 1000px !important; /* Behoud 3D effects */
+    border-radius: 20px !important; /* Afgeronde hoeken op tablet */
+    overflow: visible !important; /* Laat animaties zien */
   }
 
   .processCard {
     min-height: auto;
+    overflow: hidden !important; /* Houd tekst binnen de kaart op mobile */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
   }
+
+  /* Remove framer-motion override - let the waaier animation work */
 }
 
 @media (max-width: 768px) {
@@ -622,6 +674,7 @@
   .processContainer {
     height: auto;
     min-height: calc(100vh - 80px - 4rem); /* Minus padding */
+    padding: 1rem;
   }
 
   .processHeader {
@@ -638,36 +691,55 @@
 
   .processCards {
     max-height: none; /* Geen maximum hoogte op mobile */
+    margin-left: 0; /* Remove margin on mobile */
+    height: 70vh !important; /* Hogere height voor mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op mobile */
+    overflow: visible !important; /* Laat animaties zien */
   }
 
   .cardContainer {
-    height: auto; /* Auto hoogte op mobile */
-    min-height: 350px; /* Minimum hoogte */
-    max-height: none; /* Geen maximum */
+    /* Inherit settings from tablet view - don't override positioning */
+    width: 90% !important; /* Slightly wider on mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op small mobile */
+    overflow: visible !important; /* Laat animaties zien */
   }
 
   .processCard {
-    min-height: 350px; /* Kleinere minimum op mobile */
+    min-height: 300px; /* Kleinere minimum op mobile */
     max-height: none; /* Geen maximum op mobile */
+    overflow: hidden !important; /* Houd tekst binnen de kaart op mobile */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
   }
 
+  /* Remove framer-motion override - let the waaier animation work on mobile too */
+
+  /* Make nav items with short text on mobile */
   .navItem {
-    min-width: 100px;
-    padding: 0.75rem;
+    min-width: 80px; /* Breder voor tekst */
+    max-width: 80px;
+    padding: 0.5rem;
+    border-radius: 10px; /* Minder rond */
   }
 
-  .navNumber {
-    width: 32px;
-    height: 32px;
-    font-size: 0.875rem;
+  .navContent {
+    display: block; /* Toon tekst op mobile */
   }
 
   .navTitle {
-    font-size: 0.875rem;
+    font-size: 0.65rem; /* Nog kleinere tekst */
+    line-height: 1.1;
+    margin-bottom: 0;
   }
 
   .navSubtitle {
-    font-size: 0.75rem;
+    display: none; /* Verberg subtitle op mobile */
+  }
+
+  .navNumber {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
   }
 
   .cardTitle {
