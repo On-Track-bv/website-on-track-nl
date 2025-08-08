@@ -1,0 +1,189 @@
+name: 🔒 Security Vulnerability
+description: Report a security issue (use email for sensitive issues)
+title: "[SECURITY] "
+labels: ["security", "critical"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔒 Security Vulnerability Report
+        
+        ⚠️ **IMPORTANT**: For sensitive security issues, please email us directly at **security@on-track.nl** instead of creating a public issue.
+        
+        Use this form only for:
+        - Non-sensitive security improvements
+        - Security best practice suggestions  
+        - General security configuration issues
+        
+        See our [Security Policy](../SECURITY.md) for detailed reporting guidelines.
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: ⚡ Confirmation
+      description: Please confirm this is appropriate for a public issue
+      options:
+        - label: This is NOT a sensitive security vulnerability that could be exploited
+          required: true
+        - label: I have read the Security Policy and understand when to use email vs. GitHub issues
+          required: true
+
+  - type: dropdown
+    id: security-type
+    attributes:
+      label: 🛡️ Security Issue Type
+      description: What type of security issue is this?
+      options:
+        - 📋 Security best practice suggestion
+        - 🔧 Security configuration improvement
+        - 📚 Security documentation issue
+        - 🔍 Security audit recommendation
+        - ⚡ Performance security consideration
+        - 🌐 General security enhancement
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: Describe the security improvement or concern
+      placeholder: |
+        What security aspect needs attention?
+        
+        Why is this important for security?
+        
+        What are the potential risks if not addressed?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 📊 Severity Level
+      description: How would you rate the importance of this security improvement?
+      options:
+        - 📝 Low - Minor security enhancement
+        - 📢 Medium - Moderate security improvement
+        - ⚠️ High - Important security consideration
+        - 🚨 Critical - Must be addressed for security compliance
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: 🔍 Current State
+      description: What is the current security configuration or implementation?
+      placeholder: |
+        Currently, the website/system:
+        - Uses [current approach]
+        - Has [current configuration]
+        - Implements [current security measures]
+
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: 💡 Recommended Improvement
+      description: What specific security improvement do you recommend?
+      placeholder: |
+        I recommend:
+        1. [Specific action]
+        2. [Configuration change]
+        3. [Implementation detail]
+        
+        This would improve security by...
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: ✅ Security Benefits
+      description: How will this improvement enhance security?
+      placeholder: |
+        Security benefits:
+        - Reduces risk of [specific threat]
+        - Improves protection against [attack type]
+        - Enhances [security aspect]
+        - Complies with [security standard]
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 🔧 Implementation Suggestions
+      description: How could this security improvement be implemented?
+      placeholder: |
+        Implementation approach:
+        - Update [configuration file]
+        - Add [security header]
+        - Implement [security feature]
+        - Use [security tool/library]
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: 📚 Resources/References
+      description: Any relevant security resources, documentation, or standards
+      placeholder: |
+        Relevant resources:
+        - OWASP: [link]
+        - Security standard: [reference]
+        - Best practice guide: [link]
+        - Tool documentation: [link]
+
+  - type: dropdown
+    id: compliance
+    attributes:
+      label: 📋 Compliance/Standards
+      description: Does this relate to any specific security standards?
+      options:
+        - OWASP Top 10
+        - GDPR/Privacy compliance
+        - WCAG Accessibility
+        - ISO 27001
+        - NIST Framework
+        - Industry best practices
+        - Company security policy
+        - Not applicable
+        - Other (specify below)
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: 🧪 Testing Considerations
+      description: How can this security improvement be tested or validated?
+      placeholder: |
+        Testing approach:
+        - Use [security testing tool]
+        - Verify [specific behavior]
+        - Check [security header/configuration]
+        - Validate [protection mechanism]
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 📋 Additional Context
+      description: Any other relevant information
+      placeholder: |
+        Additional information:
+        - Related to [other security measures]
+        - Affects [specific components]
+        - Dependencies or prerequisites...
+        - Timeline considerations...
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 📞 Sensitive Security Issues
+        
+        **Remember**: For exploitable vulnerabilities or sensitive security issues, contact us directly:
+        
+        - **Email**: security@on-track.nl
+        - **Subject**: [SECURITY] Vulnerability Report
+        - **See**: [Security Policy](../SECURITY.md) for detailed guidelines
