@@ -74,16 +74,9 @@ const processSteps = [
 export function Process() {
   const { lang } = useLanguage();
   const [activeStep, setActiveStep] = useState(0);
-  const [isInScrollZone, setIsInScrollZone] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const scrollCounterRef = useRef(0);
-  const exitCooldownRef = useRef(false);
-  const lastScrollYRef = useRef(0);
-  const programmaticScrollRef = useRef(false);
-  const lastWheelTimeRef = useRef(0);
-  const touchpadDebounceRef = useRef<number | null>(null);
-  const headerNavigationRef = useRef(false);
 
   // Check if mobile/tablet
   const [isMobile, setIsMobile] = useState(false);
@@ -99,446 +92,201 @@ export function Process() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Listen for header navigation events
+  // Smooth sticky scroll effect like WorkflowStickyStepper
   useEffect(() => {
-    const handleHeaderNavigation = () => {
-      headerNavigationRef.current = true;
-      
-      // Reset flag after scroll would complete
-      setTimeout(() => {
-        headerNavigationRef.current = false;
-      }, 1000);
-    };
-
-    window.addEventListener('header-navigation', handleHeaderNavigation);
+    if (isMobile) return; // Skip sticky effect on mobile
     
-    return () => window.removeEventListener('header-navigation', handleHeaderNavigation);
-  }, []);
-
-  useEffect(() => {
-    // Skip scroll hijacking on mobile/tablet
-    if (isMobile) return;
-    
-    // Initialize scroll position
-    lastScrollYRef.current = window.scrollY;
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (!sectionRef.current) return;
-
-      // Block scroll during programmatic scroll to section
-      if (programmaticScrollRef.current) {
-        e.preventDefault();
-        return;
-      }
-
-      // Check for header navigation - bypass scroll lock completely
-      if (headerNavigationRef.current) {
-        if (isInScrollZone) {
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 300);
-        }
-        return; // Don't prevent default - let header navigation scroll through
-      }
-
-      // Better touchpad detection - touchpads usually have fractional deltaY values
-      const isTouchpad = e.deltaY % 1 !== 0 || Math.abs(e.deltaY) < 40;
-      
-      // Detect mega fast scroll (bypass scroll lock completely) - higher threshold
-      const isMegaFastScroll = Math.abs(e.deltaY) > 300; // Much higher threshold
-      if (isMegaFastScroll) {
-        // Force exit scroll lock for mega fast scroll - don't prevent default!
-        if (isInScrollZone) {
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 200);
-        }
-        // Don't prevent default - let the scroll happen naturally
-        return;
-      }
-
-      if (!isInScrollZone) return;
-
-      e.preventDefault();
-      
-      const now = Date.now();
-      lastWheelTimeRef.current = now;
-      
-      // For touchpad, add debouncing to prevent rapid consecutive events
-      if (isTouchpad) {
-        if (touchpadDebounceRef.current) {
-          clearTimeout(touchpadDebounceRef.current);
-        }
-        
-        touchpadDebounceRef.current = window.setTimeout(() => {
-          processWheelEvent(e, true);
-        }, 100); // Longer debounce for touchpad
-        return;
-      }
-      
-      // For mousewheel, process immediately
-      processWheelEvent(e, false);
-    };
-    
-    const processWheelEvent = (e: WheelEvent, isTouchpad: boolean) => {
-      // Different handling for touchpad vs mousewheel
-      let delta: number;
-      let scrollThreshold: number;
-      
-      if (isTouchpad) {
-        // For touchpad: use much smaller increments and much higher threshold
-        delta = e.deltaY > 0 ? 0.1 : -0.1; // Veel kleinere stappen
-        scrollThreshold = 15; // Veel hogere threshold
-      } else {
-        // For mousewheel: use larger increments and lower threshold
-        delta = e.deltaY > 0 ? 1 : -1;
-        scrollThreshold = 2; // Lower threshold for mousewheel
-      }
-      
-      // Accumulate scroll to prevent too fast stepping
-      scrollCounterRef.current += delta;
-      
-      if (scrollCounterRef.current >= scrollThreshold) {
-        // Scroll down - next step
-        if (activeStep < processSteps.length - 1) {
-          setActiveStep(prev => prev + 1);
-          scrollCounterRef.current = 0;
-        } else {
-          // At last step, exit scroll lock and continue scrolling
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          // Smooth exit scroll instead of jump
-          window.scrollBy({ top: 300, behavior: 'smooth' });
-          
-          // Longer cooldown for smooth scroll (must be longer than scroll animation)
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 800);
-        }
-      } else if (scrollCounterRef.current <= -scrollThreshold) {
-        // Scroll up - previous step
-        if (activeStep > 0) {
-          setActiveStep(prev => prev - 1);
-          scrollCounterRef.current = 0;
-        } else {
-          // At first step, exit scroll lock and continue scrolling up
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          // Smooth exit scroll instead of jump
-          window.scrollBy({ top: -300, behavior: 'smooth' });
-          
-          // Longer cooldown for smooth scroll (must be longer than scroll animation)
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 800);
-        }
-      }
-    };
-
     const handleScroll = () => {
-      if (!sectionRef.current) return;
-
+      if (!sectionRef.current || !stickyRef.current) return;
+      
       const section = sectionRef.current;
+      const sticky = stickyRef.current;
       const rect = section.getBoundingClientRect();
-      const headerHeight = 80; // Height of the header
-      const windowHeight = window.innerHeight;
+      const headerHeight = 80;
+      const stickyHeight = sticky.offsetHeight;
+      const totalSteps = processSteps.length;
       
-      // Detect scroll direction and speed
-      const currentScrollY = window.scrollY;
-      const scrollDirection = currentScrollY > lastScrollYRef.current ? 'down' : 'up';
-      const scrollSpeed = Math.abs(currentScrollY - lastScrollYRef.current);
-      lastScrollYRef.current = currentScrollY;
-      
-      // Detect mega fast scroll from header navigation or manual scroll
-      const isMegaFastScroll = scrollSpeed > 500; // Higher threshold
-      
-      // Check for header navigation first - bypass all logic
-      if (headerNavigationRef.current) {
-        if (isInScrollZone) {
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 500);
-        }
-        return; // Let header navigation pass through completely
+      // Sticky/freeze logic - same as WorkflowStickyStepper
+      if (rect.top <= headerHeight && rect.bottom - stickyHeight >= headerHeight) {
+        sticky.style.position = 'fixed';
+        sticky.style.top = headerHeight + 'px';
+        sticky.style.left = section.getBoundingClientRect().left + 'px';
+        sticky.style.width = section.offsetWidth + 'px';
+        sticky.style.zIndex = '30';
+      } else if (rect.bottom - stickyHeight < headerHeight) {
+        // Last step: sticky releases, but container stays at bottom of section
+        sticky.style.position = 'absolute';
+        sticky.style.top = (section.offsetHeight - stickyHeight) + 'px';
+        sticky.style.left = '0';
+        sticky.style.width = '100%';
+        sticky.style.zIndex = '10';
+      } else {
+        sticky.style.position = 'relative';
+        sticky.style.top = '0';
+        sticky.style.left = 'unset';
+        sticky.style.width = '100%';
+        sticky.style.zIndex = '10';
       }
       
-      // Skip ALL logic for mega fast scrolls - let them pass through completely
-      if (isMegaFastScroll) {
-        if (isInScrollZone) {
-          // Force exit scroll lock immediately
-          setIsInScrollZone(false);
-          scrollCounterRef.current = 0;
-          exitCooldownRef.current = true;
-          
-          setTimeout(() => {
-            exitCooldownRef.current = false;
-          }, 300);
+      // Determine active step based on scroll position
+      const scrollY = window.scrollY + headerHeight;
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const availableScroll = sectionHeight - stickyHeight;
+      const stepScroll = availableScroll / (totalSteps - 1);
+      
+      let stepIdx = 0;
+      for (let i = 0; i < totalSteps; i++) {
+        if (scrollY >= sectionTop + i * stepScroll) {
+          stepIdx = i;
         }
-        return; // Don't do any other processing for fast scrolls
       }
-      
-      // Skip direction detection during cooldown or programmatic scrolls
-      if (exitCooldownRef.current || programmaticScrollRef.current) return;
-      
-      // Simple and reliable activation logic:
-      // Activate when scrolling INTO the section area (but not when exiting away from it)
-      const sectionVisible = rect.top < windowHeight && rect.bottom > 0;
-      const sectionCentered = rect.top <= headerHeight + 100 && rect.bottom >= windowHeight - 100;
-      
-      // Smart direction-based activation:
-      // - When scrolling DOWN: activate if section top is entering the viewport (coming from above)
-      // - When scrolling UP: activate if section bottom is entering the viewport (coming from below)
-      const scrollingIntoSectionFromAbove = scrollDirection === 'down' && rect.top <= windowHeight && rect.top > -100;
-      const scrollingIntoSectionFromBelow = scrollDirection === 'up' && rect.bottom >= 0 && rect.bottom < windowHeight + 100;
-      const scrollingIntoSection = scrollingIntoSectionFromAbove || scrollingIntoSectionFromBelow;
-      
-      if (sectionVisible && !sectionCentered && !isInScrollZone && scrollingIntoSection) {
-        // Section is visible but not centered AND we're scrolling into it - fly to it!
-        setIsInScrollZone(true);
-        scrollCounterRef.current = 0;
-        programmaticScrollRef.current = true;
-        
-        // Set the correct starting step based on scroll direction
-        if (scrollDirection === 'down') {
-          // Coming from above - start at first step
-          setActiveStep(0);
-        } else if (scrollDirection === 'up') {
-          // Coming from below - start at last step
-          setActiveStep(processSteps.length - 1);
-        }
-        
-        // Always snap to optimal position
-        const targetScrollY = section.offsetTop - headerHeight;
-        
-        window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
-        
-        // Reset programmatic flag after scroll completes
-        setTimeout(() => {
-          programmaticScrollRef.current = false;
-          lastScrollYRef.current = window.scrollY;
-        }, 800);
-      } else if (!sectionVisible && isInScrollZone) {
-        // Section not visible anymore - deactivate
-        setIsInScrollZone(false);
-        scrollCounterRef.current = 0;
-      }
+      setActiveStep(stepIdx);
     };
 
-    // Add wheel listener for scroll hijacking
-    document.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
+    window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial check
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
 
-    return () => {
-      document.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('scroll', handleScroll);
-      
-      // Cleanup touchpad debounce timeout
-      if (touchpadDebounceRef.current) {
-        clearTimeout(touchpadDebounceRef.current);
-      }
-    };
-  }, [activeStep, isInScrollZone, isMobile]);
+  // Calculate spacer height for smooth scrolling - same as WorkflowStickyStepper
+  const spacerHeight = stickyRef.current ? 
+    (processSteps.length - 1) * (stickyRef.current.offsetHeight || 600) : 
+    (processSteps.length - 1) * 600;
 
   return (
-    <section className={classes.processSection} ref={sectionRef} id="process">
-      {/* Gradient background with direct SVG logo cutout */}
-      <div className={classes.logoMaskedGradientBackground} />
-      
-      <Container size="xl" className={classes.processContainer}>
-        <div className={classes.processHeader}>
-          <Title className={classes.processTitle}>
-            {lang === 'nl' ? 'Ons Proces' : 'Our Process'}
-          </Title>
-          <Text className={classes.processSubtitle}>
-            {lang === 'nl' 
-              ? 'We helpen met het leveren van goede BIM data. Wat is onze workflow:' 
-              : 'We help deliver quality BIM data. What is our workflow:'
-            }
-          </Text>
-        </div>
-
-        <div className={classes.processContent}>
-          {/* Left Navigation */}
-          <div className={classes.processNav}>
-            <div className={classes.navSticky}>
-              {processSteps.map((step, index) => (
-                <div 
-                  key={step.id}
-                  className={`${classes.navItem} ${activeStep === index ? classes.navItemActive : ''}`}
-                  onClick={() => {
-                    setActiveStep(index);
-                  }}
-                >
-                  <div className={classes.navNumber}>{step.number}</div>
-                  <div className={classes.navContent}>
-                    <Text className={classes.navTitle}>{step.title[lang]}</Text>
-                    <Text className={classes.navSubtitle}>{step.subtitle[lang]}</Text>
-                  </div>
-                </div>
-              ))}
+    <div ref={sectionRef} style={{ position: 'relative', width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+      <section className={classes.processSection} id="process">
+        {/* Gradient background with direct SVG logo cutout */}
+        <div className={classes.logoMaskedGradientBackground} />
+        
+        <div ref={stickyRef} style={{ display: 'flex', width: '100%', height: '100vh', background: 'none', boxSizing: 'border-box' }}>
+          <Container size="xl" className={classes.processContainer}>
+            <div className={classes.processHeader}>
+              <Title className={classes.processTitle}>
+                {lang === 'nl' ? 'Ons Proces' : 'Our Process'}
+              </Title>
+              <Text className={classes.processSubtitle}>
+                {lang === 'nl' 
+                  ? 'We helpen met het leveren van goede BIM data. Wat is onze workflow:' 
+                  : 'We help deliver quality BIM data. What is our workflow:'
+                }
+              </Text>
             </div>
-          </div>
 
-          {/* Right Cards - Fancy Rolling Animation */}
-          <div className={classes.processCards}>
-            {processSteps.map((step, index) => {
-              const IconComponent = step.icon;
-              const isActive = activeStep === index;
-              const isPrev = index < activeStep;
-              const isNext = index > activeStep;
-              
-              // Calculate position and scale based on relationship to active step
-              // For mobile, adjust animation to make all cards more visible
-              let xOffset = 0;
-              let scale = 0.85;
-              let zIndex = 1;
-              let opacity = 0.6;
-              let blurAmount = 20;
-              
-              // Calculate half card width for proper centering on mobile
-              const halfCardWidth = isMobile ? (window.innerWidth * 0.9) / 2 : 180; // Fallback to 180 for desktop
-              
-              if (isMobile) {
-                // Mobile: more visible background cards with smaller center offset
-                const centerOffset = window.innerWidth * 0.05; // Much smaller offset - just 5% of screen width
-                
-                if (isActive) {
-                  xOffset = centerOffset;
-                  scale = 1;
-                  zIndex = 3;
-                  opacity = 1;
-                  blurAmount = 35;
-                } else if (isPrev) {
-                  xOffset = centerOffset - 120; // 120px to the left of center
-                  scale = 0.95; // Larger scale
-                  zIndex = 2;
-                  opacity = 0.9; // More visible
-                  blurAmount = 15;
-                } else if (isNext) {
-                  xOffset = centerOffset + 120; // 120px to the right of center
-                  scale = 0.95; // Larger scale
-                  zIndex = 2;
-                  opacity = 0.9; // More visible
-                  blurAmount = 15;
-                } else {
-                  xOffset = centerOffset + (index < activeStep ? -180 : 180); // Even bigger offset for far cards
-                  scale = 0.9; // Larger scale
-                  zIndex = 1;
-                  opacity = 0.8; // Much more visible
-                  blurAmount = 8;
-                }
-              } else {
-                // Desktop: original settings
-                if (isActive) {
-                  xOffset = 0;
-                  scale = 1;
-                  zIndex = 3;
-                  opacity = 1;
-                  blurAmount = 35; // Veel meer blur voor super glassy effect
-                } else if (isPrev) {
-                  xOffset = -80;
-                  scale = 0.9;
-                  zIndex = 2;
-                  opacity = 0.8;
-                  blurAmount = 15;
-                } else if (isNext) {
-                  xOffset = 80;
-                  scale = 0.9;
-                  zIndex = 2;
-                  opacity = 0.8;
-                  blurAmount = 15;
-                } else {
-                  // Cards further away
-                  xOffset = index < activeStep ? -120 : 120;
-                  scale = 0.85;
-                  zIndex = 1;
-                  opacity = 0.5;
-                  blurAmount = 8; // Minder blur voor verre kaarten
-                }
-              }
-              
-              return (
-                <motion.div
-                  key={step.id}
-                  ref={el => { cardRefs.current[index] = el; }}
-                  className={classes.cardContainer}
-                  initial={{ x: -200, y: -200, scale: 0.85, opacity: 0.6 }}
-                  animate={{ 
-                    x: isMobile ? xOffset - halfCardWidth : xOffset, // Use calculated half width for centering on mobile
-                    y: isMobile ? -200 : 0, // Subtract half height for centering on mobile  
-                    scale: scale,
-                    opacity: opacity,
-                    rotateY: isActive ? 0 : (isPrev ? 15 : isNext ? -15 : (index < activeStep ? 25 : -25))
-                  }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                    duration: 0.6
-                  }}
-                  style={{ 
-                    zIndex: zIndex,
-                    perspective: "1000px"
-                  }}
-                >
-                  <motion.div
-                    animate={{
-                      backdropFilter: `blur(${blurAmount}px)`,
-                      backgroundColor: isActive 
-                        ? 'rgba(255, 255, 255, 0.25)'
-                        : isPrev 
-                        ? 'rgba(88, 158, 166, 0.25)'
-                        : isNext
-                        ? 'rgba(242, 143, 56, 0.25)'
-                        : 'rgba(255, 255, 255, 0.1)'
-                    }}
-                    transition={{ 
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 30,
-                      duration: 0.6
-                    }}
-                    style={{
-                      borderRadius: '20px',
-                      height: '100%',
-                      minHeight: 'min(400px, 55vh)',
-                      maxHeight: 'min(500px, 65vh)',
-                      position: 'relative',
-                      border: isActive 
-                        ? '2px solid rgba(255, 255, 255, 0.6)'
-                        : isPrev
-                        ? '1px solid rgba(88, 158, 166, 0.5)'
-                        : isNext
-                        ? '1px solid rgba(242, 143, 56, 0.5)'
-                        : '1px solid rgba(255, 255, 255, 0.2)',
-                      boxShadow: isActive
-                        ? '0 20px 60px rgba(0, 0, 0, 0.2)'
-                        : isPrev || isNext
-                        ? '0 12px 40px rgba(0, 0, 0, 0.15)'
-                        : '0 8px 24px rgba(0, 0, 0, 0.08)'
-                    }}
-                  >
+            <div className={classes.processContent}>
+              {/* Left Navigation */}
+              <div className={classes.processNav}>
+                <div className={classes.navSticky}>
+                  {processSteps.map((step, index) => (
+                    <div 
+                      key={step.id}
+                      className={`${classes.navItem} ${activeStep === index ? classes.navItemActive : ''}`}
+                      onClick={() => {
+                        setActiveStep(index);
+                      }}
+                    >
+                      <div className={classes.navNumber}>{step.number}</div>
+                      <div className={classes.navContent}>
+                        <Text className={classes.navTitle}>{step.title[lang]}</Text>
+                        <Text className={classes.navSubtitle}>{step.subtitle[lang]}</Text>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Cards - Fancy Rolling Animation */}
+              <div className={classes.processCards}>
+                {processSteps.map((step, index) => {
+                  const IconComponent = step.icon;
+                  const isActive = activeStep === index;
+                  const isPrev = index < activeStep;
+                  const isNext = index > activeStep;
+                  
+                  // Calculate position and scale based on relationship to active step
+                  // For mobile, adjust animation to make all cards more visible
+                  let xOffset = 0;
+                  let scale = 0.85;
+                  let zIndex = 1;
+                  let opacity = 0.6;
+                  let blurAmount = 20;
+                  
+                  // Calculate half card width for proper centering on mobile
+                  const halfCardWidth = isMobile ? (window.innerWidth * 0.9) / 2 : 180; // Fallback to 180 for desktop
+                  
+                  if (isMobile) {
+                    // Mobile: more visible background cards with smaller center offset
+                    const centerOffset = window.innerWidth * 0.05; // Much smaller offset - just 5% of screen width
+                    
+                    if (isActive) {
+                      xOffset = centerOffset;
+                      scale = 1;
+                      zIndex = 3;
+                      opacity = 1;
+                      blurAmount = 35;
+                    } else if (isPrev) {
+                      xOffset = centerOffset - 120; // 120px to the left of center
+                      scale = 0.95; // Larger scale
+                      zIndex = 2;
+                      opacity = 0.9; // More visible
+                      blurAmount = 15;
+                    } else if (isNext) {
+                      xOffset = centerOffset + 120; // 120px to the right of center
+                      scale = 0.95; // Larger scale
+                      zIndex = 2;
+                      opacity = 0.9; // More visible
+                      blurAmount = 15;
+                    } else {
+                      xOffset = centerOffset + (index < activeStep ? -180 : 180); // Even bigger offset for far cards
+                      scale = 0.9; // Larger scale
+                      zIndex = 1;
+                      opacity = 0.8; // Much more visible
+                      blurAmount = 8;
+                    }
+                  } else {
+                    // Desktop: original settings
+                    if (isActive) {
+                      xOffset = 0;
+                      scale = 1;
+                      zIndex = 3;
+                      opacity = 1;
+                      blurAmount = 35; // Veel meer blur voor super glassy effect
+                    } else if (isPrev) {
+                      xOffset = -80;
+                      scale = 0.9;
+                      zIndex = 2;
+                      opacity = 0.8;
+                      blurAmount = 15;
+                    } else if (isNext) {
+                      xOffset = 80;
+                      scale = 0.9;
+                      zIndex = 2;
+                      opacity = 0.8;
+                      blurAmount = 15;
+                    } else {
+                      // Cards further away
+                      xOffset = index < activeStep ? -120 : 120;
+                      scale = 0.85;
+                      zIndex = 1;
+                      opacity = 0.5;
+                      blurAmount = 8; // Minder blur voor verre kaarten
+                    }
+                  }
+                  
+                  return (
                     <motion.div
-                      animate={{
-                        opacity: isActive ? 1 : isPrev || isNext ? 0.3 : 0.1
+                      key={step.id}
+                      ref={el => { cardRefs.current[index] = el; }}
+                      className={classes.cardContainer}
+                      initial={{ x: -200, y: -200, scale: 0.85, opacity: 0.6 }}
+                      animate={{ 
+                        x: isMobile ? xOffset - halfCardWidth : xOffset, // Use calculated half width for centering on mobile
+                        y: isMobile ? -200 : 0, // Subtract half height for centering on mobile  
+                        scale: scale,
+                        opacity: opacity,
+                        rotateY: isActive ? 0 : (isPrev ? 15 : isNext ? -15 : (index < activeStep ? 25 : -25))
                       }}
                       transition={{ 
                         type: "spring",
@@ -546,58 +294,115 @@ export function Process() {
                         damping: 30,
                         duration: 0.6
                       }}
-                      style={{
-                        position: 'relative',
-                        zIndex: isActive ? 10 : isPrev || isNext ? 5 : 1,
-                        backdropFilter: isActive ? 'blur(0px)' : 'blur(2px)'
+                      style={{ 
+                        zIndex: zIndex,
+                        perspective: "1000px"
                       }}
                     >
-                      <Card 
-                        className={classes.processCard} 
-                        padding="xl" 
-                        radius="md"
-                        style={{ 
-                          background: 'transparent',
-                          border: 'none',
-                          boxShadow: 'none'
+                      <motion.div
+                        animate={{
+                          backdropFilter: `blur(${blurAmount}px)`,
+                          backgroundColor: isActive 
+                            ? 'rgba(255, 255, 255, 0.25)'
+                            : isPrev 
+                            ? 'rgba(88, 158, 166, 0.25)'
+                            : isNext
+                            ? 'rgba(242, 143, 56, 0.25)'
+                            : 'rgba(255, 255, 255, 0.1)'
+                        }}
+                        transition={{ 
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                          duration: 0.6
+                        }}
+                        style={{
+                          borderRadius: '20px',
+                          height: '100%',
+                          minHeight: 'min(400px, 55vh)',
+                          maxHeight: 'min(500px, 65vh)',
+                          position: 'relative',
+                          border: isActive 
+                            ? '2px solid rgba(255, 255, 255, 0.6)'
+                            : isPrev
+                            ? '1px solid rgba(88, 158, 166, 0.5)'
+                            : isNext
+                            ? '1px solid rgba(242, 143, 56, 0.5)'
+                            : '1px solid rgba(255, 255, 255, 0.2)',
+                          boxShadow: isActive
+                            ? '0 20px 60px rgba(0, 0, 0, 0.2)'
+                            : isPrev || isNext
+                            ? '0 12px 40px rgba(0, 0, 0, 0.15)'
+                            : '0 8px 24px rgba(0, 0, 0, 0.08)'
                         }}
                       >
-                      <Group className={classes.cardHeader} justify="space-between" mb="lg">
-                        <Badge 
-                          variant="filled" 
-                          size="lg"
-                          className={classes.stepBadge}
+                        <motion.div
+                          animate={{
+                            opacity: isActive ? 1 : isPrev || isNext ? 0.3 : 0.1
+                          }}
+                          transition={{ 
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30,
+                            duration: 0.6
+                          }}
+                          style={{
+                            position: 'relative',
+                            zIndex: isActive ? 10 : isPrev || isNext ? 5 : 1,
+                            backdropFilter: isActive ? 'blur(0px)' : 'blur(2px)'
+                          }}
                         >
-                          {lang === 'nl' ? `Stap ${step.number}` : `Step ${step.number}`}
-                        </Badge>
-                        <IconComponent 
-                          size={32} 
-                          className={classes.stepIcon}
-                        />
-                      </Group>
+                          <Card 
+                            className={classes.processCard} 
+                            padding="xl" 
+                            radius="md"
+                            style={{ 
+                              background: 'transparent',
+                              border: 'none',
+                              boxShadow: 'none'
+                            }}
+                          >
+                          <Group className={classes.cardHeader} justify="space-between" mb="lg">
+                            <Badge 
+                              variant="filled" 
+                              size="lg"
+                              className={classes.stepBadge}
+                            >
+                              {lang === 'nl' ? `Stap ${step.number}` : `Step ${step.number}`}
+                            </Badge>
+                            <IconComponent 
+                              size={32} 
+                              className={classes.stepIcon}
+                            />
+                          </Group>
 
-                      <Stack gap="md">
-                        <Title order={3} className={classes.cardTitle}>
-                          {step.title[lang]}
-                        </Title>
-                        
-                        <Text className={classes.cardDescription}>
-                          {step.description[lang]}
-                        </Text>
+                          <Stack gap="md">
+                            <Title order={3} className={classes.cardTitle}>
+                              {step.title[lang]}
+                            </Title>
+                            
+                            <Text className={classes.cardDescription}>
+                              {step.description[lang]}
+                            </Text>
 
-                        <Text className={classes.cardDetails}>
-                          {step.details[lang]}
-                        </Text>
-                      </Stack>
-                      </Card>
+                            <Text className={classes.cardDetails}>
+                              {step.details[lang]}
+                            </Text>
+                          </Stack>
+                          </Card>
+                        </motion.div>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Container>
         </div>
-      </Container>
-    </section>
+      </section>
+      
+      {/* Spacer for smooth scrolling - same as WorkflowStickyStepper */}
+      <div style={{ height: spacerHeight }} />
+    </div>
   );
 }

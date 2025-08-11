@@ -4,12 +4,9 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 12rem;
-  margin-bottom: 12rem;
   overflow: visible; /* Laat afgeronde hoeken zien */
-  /* Make it full width of the viewport */
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  /* Full width of the viewport - handled by parent wrapper */
+  width: 100%;
   border-radius: 20px; /* Afgeronde hoeken voor hele sectie */
 }
 .cardContainer {
