@@ -81,6 +81,13 @@ export function Process() {
   // Check if mobile/tablet
   const [isMobile, setIsMobile] = useState(false);
   
+  // Touch/swipe state for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+  
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 992);
@@ -91,6 +98,35 @@ export function Process() {
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Swipe handlers for mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    setTouchEnd(null); // Reset touchEnd
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!isMobile || !touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && activeStep < processSteps.length - 1) {
+      // Swipe left: next step
+      setActiveStep(activeStep + 1);
+    }
+    if (isRightSwipe && activeStep > 0) {
+      // Swipe right: previous step
+      setActiveStep(activeStep - 1);
+    }
+  };
 
   // Smooth sticky scroll effect like WorkflowStickyStepper
   useEffect(() => {
@@ -151,16 +187,27 @@ export function Process() {
   }, [isMobile]);
 
   // Spacer exact zo groot dat sticky pas loskomt als laatste stap in beeld is - same as WorkflowStickyStepper
-  const spacerHeight = stickyRef.current ? 
+  const spacerHeight = isMobile ? 50 : ( // Kleine spacer op mobile voor wat extra ruimte
+    stickyRef.current ? 
     (processSteps.length - 1) * (stickyRef.current.offsetHeight || 400) : 
-    (processSteps.length - 1) * 400;
+    (processSteps.length - 1) * 400
+  );
 
   return (
     <div ref={sectionRef} style={{ position: 'relative', width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginTop: '12rem', marginBottom: '12rem' }} id="process">
       {/* Gradient background with direct SVG logo cutout */}
       <div className={classes.logoMaskedGradientBackground} />
       
-      <div ref={stickyRef} style={{ display: 'flex', width: '100%', height: '100vh', background: 'none', boxSizing: 'border-box', top: 0, left: 0 }}>
+      <div ref={stickyRef} style={{ 
+        display: 'flex', 
+        width: '100%', 
+        height: isMobile ? 'auto' : '100vh', // Op mobile auto height, desktop 100vh
+        minHeight: isMobile ? '70vh' : '100vh', // Minimum height voor mobile
+        background: 'none', 
+        boxSizing: 'border-box', 
+        top: 0, 
+        left: 0 
+      }}>
         <Container size="xl" className={classes.processContainer}>
             <div className={classes.processHeader}>
               <Title className={classes.processTitle}>
@@ -197,7 +244,12 @@ export function Process() {
               </div>
 
               {/* Right Cards - Fancy Rolling Animation */}
-              <div className={classes.processCards}>
+              <div 
+                className={classes.processCards}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
                 {processSteps.map((step, index) => {
                   const IconComponent = step.icon;
                   const isActive = activeStep === index;
