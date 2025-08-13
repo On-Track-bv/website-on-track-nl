@@ -113,3 +113,43 @@
   position: relative;
   top: -0.55em; 
 }
+
+/* Mobile collapse styles */
+.storySection {
+  width: 100%;
+}
+
+.readMoreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  background: rgba(var(--my-primary-rgb), 0.1);
+  border: 1px solid var(--my-primary);
+  border-radius: var(--mantine-radius-sm);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.readMoreButton:hover {
+  background: rgba(var(--my-primary-rgb), 0.15);
+  transform: translateY(-1px);
+}
+
+.readMoreText {
+  font-size: 0.9rem;
+  color: var(--my-primary);
+  font-weight: 600;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+.chevronIcon {
+  color: var(--my-primary)!important;
+}
+
+.chevronIcon:hover {
+  background: transparent;
+}

@@ -1,3 +1,6 @@
+import { ActionIcon, Collapse } from '@mantine/core';
+import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import janImg from '../../assets/on-track/Jan.jpg';
 import stijnImg from '../../assets/on-track/Stijn.jpg';
@@ -53,25 +56,88 @@ const people = {
   ],
 };
 
+const texts = {
+  en: {
+    readMore: 'Read more',
+    showLess: 'Show less',
+  },
+  nl: {
+    readMore: 'Lees meer',
+    showLess: 'Toon minder',
+  },
+};
+
 export function AboutUs() {
   const { lang } = useLanguage();
   const team = people[lang];
+  const t = texts[lang];
+  
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // State voor elke persoon apart - object met email als key
+  const [expandedStories, setExpandedStories] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 992);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const toggleStory = (email: string) => {
+    setExpandedStories(prev => ({
+      ...prev,
+      [email]: !prev[email]
+    }));
+  };
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.grid}>
-        {team.map((person) => (
-          <div className={classes.card} key={person.email}>
-            <img src={person.img} alt={person.name} className={classes.avatar} />
-            <div className={classes.name}>{person.name}</div>
-            <div className={classes.infoLine}>
-              <span className={classes.email}>{person.email}</span>
-              <span className={classes.dot}>•</span>
-              <span className={classes.email}>{person.role}</span>
+        {team.map((person) => {
+          const isExpanded = expandedStories[person.email] || false;
+          
+          return (
+            <div className={classes.card} key={person.email}>
+              <img src={person.img} alt={person.name} className={classes.avatar} />
+              <div className={classes.name}>{person.name}</div>
+              <div className={classes.infoLine}>
+                <span className={classes.email}>{person.email}</span>
+                <span className={classes.dot}>•</span>
+                <span className={classes.email}>{person.role}</span>
+              </div>
+              
+              {isMobile ? (
+                <div className={classes.storySection}>
+                  <Collapse in={isExpanded}>
+                    <div className={classes.story}>{person.story}</div>
+                  </Collapse>
+                  <div 
+                    className={classes.readMoreButton}
+                    onClick={() => toggleStory(person.email)}
+                  >
+                    <span className={classes.readMoreText}>
+                      {isExpanded ? t.showLess : t.readMore}
+                    </span>
+                    <ActionIcon
+                      variant="transparent"
+                      size="sm"
+                      className={classes.chevronIcon}
+                    >
+                      {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+                    </ActionIcon>
+                  </div>
+                </div>
+              ) : (
+                <div className={classes.story}>{person.story}</div>
+              )}
             </div>
-            <div className={classes.story}>{person.story}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
