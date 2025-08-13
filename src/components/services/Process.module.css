@@ -255,7 +255,7 @@
 
 .cardContainer {
   position: absolute;
-  top: clamp(1vh, 10%, 10vh); /* Minimum 1vh, voorkeur 10%, maximum 10vh */
+  top: 25%; /* Veel hoger gepositioneerd */
   left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
   transform: translateY(-50%); /* Alleen verticaal centreren */
   width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
