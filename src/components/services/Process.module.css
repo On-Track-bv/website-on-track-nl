@@ -1,87 +1,3 @@
-/* Process Section - Full Screen Height with Animated Background */
-.processSection {
-  height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: visible; /* Laat afgeronde hoeken zien */
-  /* Full width of the viewport - handled by parent wrapper */
-  width: 100%;
-  border-radius: 20px; /* Afgeronde hoeken voor hele sectie */
-}
-.cardContainer {
-  position: absolute;
-  top: clamp(1vh, 10%, 10vh); /* Minimum 1vh, voorkeur 10%, maximum 10vh */
-  left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
-  transform: translateY(-50%); /* Alleen verticaal centreren */
-  width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
-  max-width: none; /* Geen viewport-based limiet */
-  height: min(450px, 60vh); /* Responsive hoogte */
-  overflow: visible; /* Laat zijkanten van kaarten zien */
-  border-radius: 20px; /* Afgeronde hoeken voor container */
-  /* Remove old transitions - framer-motion handles this now */
-}
-
-.processCard {
-  /* Base glassmorphism effect */
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  height: 100%; /* Vul de hele container */
-  min-height: min(400px, 55vh); /* Responsive minimum hoogte */
-  max-height: min(500px, 65vh); /* Responsive maximum hoogte */
-  position: relative;
-  overflow: hidden !important; /* Houd tekst binnen de kaart */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  /* Remove all transitions - framer-motion handles this */
-  transition: none !important;
-}
-
-/* Dark mode gradient background */
-[data-mantine-color-scheme='dark'] .processSection {
-  background: linear-gradient(-45deg, 
-    #0c2659, 
-    #264175, 
-    #4163a3, 
-    #589ea6,
-    #0c2659,
-    #264175
-  );
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-
-.processSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  
-  /* Create a stronger, inverted gradient for cut-out effect */
-  background: linear-gradient(-45deg, 
-    rgba(88, 158, 166, 0.8), 
-    rgba(164, 215, 219, 0.7), 
-    rgba(247, 206, 145, 0.7), 
-    rgba(242, 143, 56, 0.8),
-    rgba(88, 158, 166, 0.8),
-    rgba(164, 215, 219, 0.7)
-  );
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  
-  /* Apply the logo mask to cut out the logo shape */
-  mask: url(#logoMask);
-  -webkit-mask: url(#logoMask);
-  
-  pointer-events: none;
-}
-
 /* Simple gradient background without cutout */
 .logoMaskedGradientBackground {
   position: absolute;
@@ -120,22 +36,6 @@
   animation: gradientShift 15s ease infinite;
 }
 
-/* Floating orbs overlay */
-.processSection::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(88, 158, 166, 0.2) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(242, 143, 56, 0.2) 0%, transparent 50%),
-              radial-gradient(circle at 40% 40%, rgba(247, 206, 145, 0.1) 0%, transparent 50%);
-  animation: floatingOrbs 25s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -145,18 +45,6 @@
   }
   100% {
     background-position: 0% 50%;
-  }
-}
-
-@keyframes overlayShift {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
   }
 }
 
@@ -347,7 +235,6 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Right Cards */
 /* Right Cards - Fancy Rolling Animation */
 .processCards {
   flex: 1;
@@ -368,7 +255,7 @@
 
 .cardContainer {
   position: absolute;
-  top: 10%; /* Standaard 10% voor normale schermen */
+  top: clamp(1vh, 10%, 10vh); /* Minimum 1vh, voorkeur 10%, maximum 10vh */
   left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
   transform: translateY(-50%); /* Alleen verticaal centreren */
   width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
@@ -407,58 +294,6 @@
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.2);
   transition: none !important;
-}
-
-/* Active card - most prominent */
-.processCardActive {
-  background: rgba(255, 255, 255, 0.4) !important;
-  border: 2px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
-}
-
-[data-mantine-color-scheme='dark'] .processCardActive {
-  background: rgba(255, 255, 255, 0.25) !important;
-  border: 2px solid rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Previous card - subtle blue tint */
-.processCardPrev {
-  background: rgba(88, 158, 166, 0.3) !important;
-  border: 1px solid rgba(88, 158, 166, 0.5) !important;
-  box-shadow: 0 12px 40px rgba(88, 158, 166, 0.15) !important;
-}
-
-[data-mantine-color-scheme='dark'] .processCardPrev {
-  background: rgba(12, 38, 89, 0.4) !important;
-  border: 1px solid rgba(12, 38, 89, 0.6) !important;
-  box-shadow: 0 12px 40px rgba(12, 38, 89, 0.2) !important;
-}
-
-/* Next card - subtle orange tint */
-.processCardNext {
-  background: rgba(242, 143, 56, 0.3) !important;
-  border: 1px solid rgba(242, 143, 56, 0.5) !important;
-  box-shadow: 0 12px 40px rgba(242, 143, 56, 0.15) !important;
-}
-
-[data-mantine-color-scheme='dark'] .processCardNext {
-  background: rgba(65, 99, 163, 0.4) !important;
-  border: 1px solid rgba(65, 99, 163, 0.6) !important;
-  box-shadow: 0 12px 40px rgba(65, 99, 163, 0.2) !important;
-}
-
-/* Far cards - more transparent and muted */
-.processCardFar {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
-}
-
-[data-mantine-color-scheme='dark'] .processCardFar {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Card Content - Remove transitions to let framer-motion handle everything */
@@ -544,6 +379,184 @@
   color: var(--my-accent);
   font-weight: 500;
   align-self: flex-start;
+}
+
+/* Responsive Design */
+@media (max-height: 700px) {
+  .cardContainer {
+    top: 1vh; /* Bij kleine schermen gebruik 1vh */
+  }
+}
+
+@media (max-width: 1200px) {
+  .processContent {
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+  }
+
+  .processTitle {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .processContent {
+    grid-template-columns: 1fr;
+    gap: 0rem; /* Kleinere gap tussen nav en cards */
+  }
+
+  .processHeader {
+    margin-bottom: 1rem; /* Veel minder spacing onder header */
+  }
+
+  .processContainer {
+    padding: 1rem; /* Minder padding op mobile */
+  }
+
+  .processNav {
+    order: 1; /* Nav goes to top */
+  }
+
+  .processCards {
+    order: 2; /* Cards go below nav */
+  }
+
+  .navSticky {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem; /* Meer spacing tussen tabs */
+    margin-bottom: 0rem; /* Geen extra spacing naar kaarten */
+  }
+
+  .navItem {
+    flex-direction: column;
+    text-align: center;
+    min-width: 90px; /* Breder voor tekst + nummer */
+    max-width: 90px;
+    padding: 0.75rem 0.5rem;
+    border-radius: 12px; /* Minder rond voor tekst */
+  }
+
+  .navContent {
+    margin-top: 0.25rem;
+    display: block; /* Toon tekst op mobile */
+  }
+
+  .navTitle {
+    font-size: 0.7rem; /* Kleinere tekst voor mobile */
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+
+  .navSubtitle {
+    display: none; /* Verberg subtitle op tablet */
+  }
+
+  .navNumber {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem; /* Ruimte voor tekst */
+  }
+
+  .cardContainer {
+    position: absolute !important; /* Behoud absolute positioning voor animaties */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
+    margin-bottom: 1rem; /* Minder margin */
+    top: 50% !important; /* Center vertically */
+    left: 50% !important; /* Center horizontally as base position for framer-motion */
+    /* Remove transform override - let framer-motion handle all transforms including centering */
+    width: 90% !important; /* Volle breedte op mobile */
+    height: min(500px, 65vh) !important; /* Hogere kaarten */
+    overflow: visible !important; /* Laat animaties zien op mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op mobile */
+  }
+
+  .processCards {
+    height: 100% !important;
+    display: flex !important; /* Behoud flex voor animaties */
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important; /* No gap for overlapping effect */
+    margin-left: 0 !important;
+    min-width: auto !important;
+    perspective: 1000px !important; /* Behoud 3D effects */
+    border-radius: 20px !important; /* Afgeronde hoeken op tablet */
+    overflow: visible !important; /* Laat animaties zien */
+  }
+
+  .processCard {
+    min-height: auto;
+    overflow: hidden !important; /* Houd tekst binnen de kaart op mobile */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
+  }
+
+  /* Remove framer-motion override - let the waaier animation work */
+}
+
+@media (max-width: 768px) {
+  .processCards {
+    max-height: none; /* Geen maximum hoogte op mobile */
+    margin-left: 0; /* Remove margin on mobile */
+    height: 70vh !important; /* Hogere height voor mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op mobile */
+    overflow: visible !important; /* Laat animaties zien */
+  }
+
+  .cardContainer {
+    /* Inherit settings from tablet view - don't override positioning */
+    width: 90% !important; /* Slightly wider on mobile */
+    border-radius: 20px !important; /* Afgeronde hoeken op small mobile */
+    overflow: visible !important; /* Laat animaties zien */
+  }
+
+  .processCard {
+    min-height: 300px; /* Kleinere minimum op mobile */
+    max-height: none; /* Geen maximum op mobile */
+    overflow: hidden !important; /* Houd tekst binnen de kaart op mobile */
+    /* Remove opacity/visibility overrides - let framer-motion handle the waaier effect */
+  }
+
+  /* Remove framer-motion override - let the waaier animation work on mobile too */
+
+  /* Make nav items with short text on mobile */
+  .navItem {
+    min-width: 80px; /* Breder voor tekst */
+    max-width: 80px;
+    padding: 0.5rem;
+    border-radius: 10px; /* Minder rond */
+  }
+
+  .navContent {
+    display: block; /* Toon tekst op mobile */
+  }
+
+  .navTitle {
+    font-size: 0.65rem; /* Nog kleinere tekst */
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+
+  .navSubtitle {
+    display: none; /* Verberg subtitle op mobile */
+  }
+
+  .navNumber {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .cardTitle {
+    font-size: 1.5rem;
+  }
+
+  .cardDescription {
+    font-size: 1rem;
+  }
 }
 
 /* Responsive Design */

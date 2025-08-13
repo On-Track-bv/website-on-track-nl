@@ -106,15 +106,15 @@ export function Process() {
       const stickyHeight = sticky.offsetHeight;
       const totalSteps = processSteps.length;
       
-      // Sticky/freeze logic - same as WorkflowStickyStepper
+      // Sticky/freeze logic - fixed: laatste stap blijft langer hangen
       if (rect.top <= headerHeight && rect.bottom - stickyHeight >= headerHeight) {
         sticky.style.position = 'fixed';
         sticky.style.top = headerHeight + 'px';
         sticky.style.left = section.getBoundingClientRect().left + 'px';
         sticky.style.width = section.offsetWidth + 'px';
         sticky.style.zIndex = '30';
-      } else if (rect.bottom - stickyHeight < headerHeight) {
-        // Last step: sticky releases, but container stays at bottom of section
+      } else if (rect.bottom - stickyHeight <= headerHeight) {
+        // Laatste stap: sticky los, maar sticky container blijft onderaan de sectie
         sticky.style.position = 'absolute';
         sticky.style.top = (section.offsetHeight - stickyHeight) + 'px';
         sticky.style.left = '0';
@@ -128,7 +128,7 @@ export function Process() {
         sticky.style.zIndex = '10';
       }
       
-      // Determine active step based on scroll position
+      // Actieve stap bepalen - exact same as WorkflowStickyStepper  
       const scrollY = window.scrollY + headerHeight;
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
@@ -150,19 +150,18 @@ export function Process() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);
 
-  // Calculate spacer height for smooth scrolling - same as WorkflowStickyStepper
+  // Spacer exact zo groot dat sticky pas loskomt als laatste stap in beeld is - same as WorkflowStickyStepper
   const spacerHeight = stickyRef.current ? 
-    (processSteps.length - 1) * (stickyRef.current.offsetHeight || 600) : 
-    (processSteps.length - 1) * 600;
+    (processSteps.length - 1) * (stickyRef.current.offsetHeight || 400) : 
+    (processSteps.length - 1) * 400;
 
   return (
-    <div ref={sectionRef} style={{ position: 'relative', width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
-      <section className={classes.processSection} id="process">
-        {/* Gradient background with direct SVG logo cutout */}
-        <div className={classes.logoMaskedGradientBackground} />
-        
-        <div ref={stickyRef} style={{ display: 'flex', width: '100%', height: '100vh', background: 'none', boxSizing: 'border-box' }}>
-          <Container size="xl" className={classes.processContainer}>
+    <div ref={sectionRef} style={{ position: 'relative', width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginTop: '12rem', marginBottom: '12rem' }} id="process">
+      {/* Gradient background with direct SVG logo cutout */}
+      <div className={classes.logoMaskedGradientBackground} />
+      
+      <div ref={stickyRef} style={{ display: 'flex', width: '100%', height: '100vh', background: 'none', boxSizing: 'border-box', top: 0, left: 0 }}>
+        <Container size="xl" className={classes.processContainer}>
             <div className={classes.processHeader}>
               <Title className={classes.processTitle}>
                 {lang === 'nl' ? 'Ons Proces' : 'Our Process'}
@@ -399,7 +398,6 @@ export function Process() {
             </div>
           </Container>
         </div>
-      </section>
       
       {/* Spacer for smooth scrolling - same as WorkflowStickyStepper */}
       <div style={{ height: spacerHeight }} />
