@@ -255,7 +255,7 @@
 
 .cardContainer {
   position: absolute;
-  top: 25%; /* Veel hoger gepositioneerd */
+  top: 25%; /* Normale positie voor grote schermen */
   left: 5%; /* Meer ruimte aan beide kanten voor zichtbare kaarten */
   transform: translateY(-50%); /* Alleen verticaal centreren */
   width: 90%; /* Minder breed zodat kaarten aan zijkanten zichtbaar zijn */
@@ -560,9 +560,9 @@
 }
 
 /* Responsive Design */
-@media (max-height: 700px) {
+@media (max-height: 900px) {
   .cardContainer {
-    top: 1vh; /* Bij kleine schermen gebruik 1vh */
+    top: 15%; /* Bij kleinere browser hoogte hoger gepositioneerd */
   }
 }
 
